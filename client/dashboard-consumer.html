@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Customer Dashboard — GigCoop</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <a href="/" class="logo">
+      <div class="logo-icon">🏘️</div>
+      <span class="brand">GigCoop</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/services.html">Services</a></li>
+      <li><a href="/group-booking.html">Group Booking</a></li>
+      <li><a href="/voting.html">Governance</a></li>
+      <li><a href="/subscriptions.html">Plans</a></li>
+      <li><a href="/referral.html">Referral</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="btn btn-ghost btn-sm" onclick="Auth.switchDemoRole('provider')">⚡ Switch to Provider View</button>
+      <button class="btn btn-outline btn-sm" onclick="Auth.logout()">Logout</button>
+    </div>
+  </div>
+</nav>
+
+<div class="dashboard-layout">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:24px; padding:0 8px;">
+      <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&q=80" class="avatar avatar-md" alt="Avatar" id="user-avatar" />
+      <div>
+        <h4 id="user-name">Priya Sharma</h4>
+        <span class="badge badge-teal" id="user-society">Green Meadows</span>
+      </div>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li><a href="#orders" class="active"><span>📦</span> My Bookings</a></li>
+      <li><a href="/subscriptions.html"><span>🔄</span> Subscriptions</a></li>
+      <li><a href="/group-booking.html"><span>🏘️</span> Group Deals</a></li>
+      <li><a href="/voting.html"><span>🗳️</span> Community Voting</a></li>
+      <li><a href="/referral.html"><span>🎁</span> Refer & Earn</a></li>
+      <div class="sidebar-divider"></div>
+      <li><a href="/services.html"><span>🔍</span> Book New Service</a></li>
+    </ul>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="flex-between" style="margin-bottom:32px; flex-wrap:wrap; gap:16px;">
+      <div>
+        <h2>Resident Dashboard</h2>
+        <p style="color:var(--text-secondary); font-size:0.9rem;">Track live appointments, chat with assigned worker-owners, and view history</p>
+      </div>
+      <a href="/services.html" class="btn btn-primary btn-sm">+ Book New Service</a>
+    </div>
+
+    <!-- Quick Stats -->
+    <!-- Quick Stats -->
+    <div class="stat-cards">
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background:rgba(37, 99, 235,0.15); color:var(--primary-light);">⚡</div>
+        <div class="stat-card-value" id="stat-active-count">1</div>
+        <div class="stat-card-label">Active Job in Progress</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background:rgba(16,185,129,0.15); color:var(--success);">✅</div>
+        <div class="stat-card-value" id="stat-completed-count">12</div>
+        <div class="stat-card-label">Completed Services</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background:rgba(245,158,11,0.15); color:var(--gold);">👛</div>
+        <div class="stat-card-value" id="stat-wallet-amount">₹250</div>
+        <div class="stat-card-label">Co-op Wallet Cashback</div>
+      </div>
+    </div>
+
+    <!-- Active Live Order Section (Dynamic) -->
+    <div id="active-job-container">
+      <!-- Populated dynamically via loadConsumerDashboard() -->
+    </div>
+
+    <!-- Booking History -->
+    <div style="margin-top:36px;">
+      <div class="flex-between" style="margin-bottom:16px;">
+        <h3>Booking History & Receipts</h3>
+        <span class="badge badge-teal" id="booking-total-badge">All Bookings</span>
+      </div>
+      <div class="table-container">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Service</th>
+              <th>Provider</th>
+              <th>Scheduled Date</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="bookings-tbody">
+            <!-- Populated dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ============================================================ REAL-TIME CHAT DRAWER ============================================================ -->
+<div class="chat-drawer" id="chat-drawer" style="display:none;">
+  <div class="chat-header">
+    <div style="display:flex; align-items:center; gap:10px;">
+      <div class="avatar-placeholder" style="width:32px; height:32px; font-size:0.8rem;">SD</div>
+      <div>
+        <strong style="font-size:0.88rem;">Sunita Devi</strong>
+        <div style="font-size:0.7rem; color:var(--success);">● Online (En route)</div>
+      </div>
+    </div>
+    <button class="modal-close" onclick="toggleChatDrawer()">✕</button>
+  </div>
+
+  <div class="chat-messages" id="chat-msgs">
+    <div class="chat-msg chat-msg-received">
+      Namaste Priya ji! I am on my way with our hospital-grade eco cleaning kit and ladder.
+    </div>
+    <div class="chat-msg chat-msg-sent">
+      Great Sunita! Please ring the bell for Flat 402, B Wing. Guard has your entry pass.
+    </div>
+    <div class="chat-msg chat-msg-received">
+      Perfect, reaching your lobby in approximately 10 minutes.
+    </div>
+  </div>
+
+  <form id="chat-form" class="chat-input-bar" onsubmit="sendChatMsg(event)">
+    <input type="text" id="chat-input" class="form-control" placeholder="Type a message..." style="padding:8px 12px; font-size:0.85rem;" required />
+    <button type="submit" class="btn btn-primary btn-sm">Send</button>
+  </form>
+</div>
+
+<!-- ============================================================ REVIEW MODAL ============================================================ -->
+<div class="modal-overlay" id="review-modal">
+  <div class="modal" style="max-width:480px;">
+    <div class="modal-header">
+      <div>
+        <h3>⭐ Leave Service Review</h3>
+        <p style="color:var(--text-muted); font-size:0.85rem;" id="rev-subtitle">Rajesh Kumar • Electrical Inspection</p>
+      </div>
+      <button class="modal-close" onclick="closeModal('review-modal')">✕</button>
+    </div>
+
+    <form id="review-form">
+      <div class="form-group" style="text-align:center;">
+        <label class="form-label">Select Star Rating</label>
+        <div style="font-size:2rem; cursor:pointer; color:var(--gold);" id="star-picker">
+          <span onclick="setStars(1)">★</span>
+          <span onclick="setStars(2)">★</span>
+          <span onclick="setStars(3)">★</span>
+          <span onclick="setStars(4)">★</span>
+          <span onclick="setStars(5)">★</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Your Feedback / Comments</label>
+        <textarea class="form-control" rows="3" placeholder="How was the punctuality, cleanliness and professionalism?" required></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">
+        <span>Submit Review & Award Worker Equity</span> 🌟
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- ============================================================ RECEIPT VIEW MODAL ============================================================ -->
+<div class="modal-overlay" id="receipt-modal">
+  <div class="modal" style="max-width:540px;">
+    <div class="modal-header">
+      <div>
+        <h3>🧾 Cooperative Booking Receipt</h3>
+        <p style="color:var(--text-muted); font-size:0.85rem;" id="modal-rcpt-id">Booking #BK-9042</p>
+      </div>
+      <button class="modal-close" onclick="closeModal('receipt-modal')">✕</button>
+    </div>
+
+    <div style="background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:20px; margin-bottom:20px;">
+      <div class="flex-between" style="border-bottom:1px solid var(--border); padding-bottom:12px; margin-bottom:12px;">
+        <div>
+          <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Service Item</span>
+          <h4 id="modal-rcpt-service" style="font-size:1.1rem; margin-top:2px;">Home Deep Cleaning</h4>
+        </div>
+        <div style="text-align:right;">
+          <span class="status status-confirmed" id="modal-rcpt-status">Confirmed</span>
+        </div>
+      </div>
+
+      <div class="grid-2" style="gap:12px; font-size:0.85rem; margin-bottom:14px;">
+        <div>
+          <span style="color:var(--text-muted);">Assigned Worker-Owner</span>
+          <div style="font-weight:600; margin-top:2px;" id="modal-rcpt-provider">Sunita Devi (4.95★)</div>
+        </div>
+        <div>
+          <span style="color:var(--text-muted);">Scheduled Date & Time</span>
+          <div style="font-weight:600; margin-top:2px;" id="modal-rcpt-date">Tomorrow, 10:00 AM</div>
+        </div>
+        <div>
+          <span style="color:var(--text-muted);">Service Address</span>
+          <div style="font-weight:600; margin-top:2px;" id="modal-rcpt-addr">Flat 402, Green Meadows</div>
+        </div>
+        <div>
+          <span style="color:var(--text-muted);">Payment Mode</span>
+          <div style="font-weight:600; color:var(--accent-light); margin-top:2px;">Cash / UPI on Completion</div>
+        </div>
+      </div>
+
+      <div style="border-top:1px solid var(--border); padding-top:12px; font-size:0.85rem;">
+        <div class="flex-between" style="margin-bottom:6px;">
+          <span style="color:var(--text-secondary);">Worker Direct Take-Home (90%)</span>
+          <span id="modal-rcpt-worker-pay">₹1,169</span>
+        </div>
+        <div class="flex-between" style="color:var(--text-muted); margin-bottom:6px;">
+          <span>Co-op Operations & Welfare Reserve (10%)</span>
+          <span id="modal-rcpt-fee">₹130</span>
+        </div>
+        <div class="flex-between" style="color:var(--gold); margin-bottom:10px;">
+          <span>Worker Equity Points Awarded</span>
+          <span id="modal-rcpt-equity">+65 pts</span>
+        </div>
+        <div class="flex-between" style="border-top:1px solid var(--border); padding-top:10px;">
+          <span style="font-weight:700; font-size:1.05rem;">Total Amount Paid</span>
+          <span style="font-family:var(--font-heading); font-size:1.4rem; font-weight:800; color:var(--accent);" id="modal-rcpt-total">₹1,299</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:12px;">
+      <button class="btn btn-outline" style="flex:1; justify-content:center;" onclick="window.print()">
+        🖨️ Print Invoice
+      </button>
+      <button class="btn btn-primary" style="flex:1; justify-content:center;" onclick="closeModal('receipt-modal'); showToast('Invoice PDF downloaded to your device.', 'success')">
+        📥 Download Receipt
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toast-container"></div>
+
+<script src="js/mockData.js"></script>
+<script src="js/i18n.js"></script>
+<script>
+  let consumerBookings = [];
+
+  function toggleChatDrawer() {
+    const d = document.getElementById('chat-drawer');
+    d.style.display = (d.style.display === 'none' || !d.style.display) ? 'flex' : 'none';
+  }
+
+  function sendChatMsg(e) {
+    e.preventDefault();
+    const input = document.getElementById('chat-input');
+    const msg = input.value.trim();
+    if (!msg) return;
+
+    const msgs = document.getElementById('chat-msgs');
+    const userBubble = document.createElement('div');
+    userBubble.className = 'chat-msg chat-msg-sent';
+    userBubble.textContent = msg;
+    msgs.appendChild(userBubble);
+    input.value = '';
+    msgs.scrollTop = msgs.scrollHeight;
+
+    setTimeout(() => {
+      const reply = document.createElement('div');
+      reply.className = 'chat-msg chat-msg-received';
+      reply.textContent = 'Understood! Arriving on schedule with full equipment.';
+      msgs.appendChild(reply);
+      msgs.scrollTop = msgs.scrollHeight;
+    }, 1200);
+  }
+
+  function openReviewModal(provider, svc) {
+    document.getElementById('rev-subtitle').textContent = `${provider} • ${svc}`;
+    openModal('review-modal');
+  }
+
+  function setStars(n) {
+    showToast(`Selected ${n} Stars rating!`, 'info');
+  }
+
+  document.getElementById('review-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    closeModal('review-modal');
+    showToast('🎉 Review posted! +25 Equity Points awarded to worker-owner.', 'success');
+  });
+
+  function openModal(id) { document.getElementById(id).classList.add('open'); }
+  function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+  async function loadConsumerDashboard() {
+    const user = Auth.getUser();
+    if (user) {
+      document.getElementById('user-name').textContent = user.name || 'Priya Sharma';
+      if (user.societyName) document.getElementById('user-society').textContent = user.societyName;
+    }
+
+    let apiBookings = [];
+    try {
+      const res = await api('/bookings/my');
+      if (res && res.data && res.data.length > 0) {
+        apiBookings = res.data;
+      }
+    } catch (err) {
+      console.warn('API bookings load error', err);
+    }
+
+    const localBookings = BookingHelper.getAll();
+    const map = new Map();
+    // Insert local bookings first
+    localBookings.forEach(b => {
+      const id = b._id || (b.service?.title + b.createdAt);
+      map.set(id, b);
+    });
+    // Add API bookings
+    apiBookings.forEach(b => {
+      const id = b._id || (b.service?.title + b.createdAt);
+      if (!map.has(id)) map.set(id, b);
+    });
+
+    // If still empty, add default realistic demo bookings
+    if (map.size === 0) {
+      const seedBookings = window.MOCK_DATA?.bookings || [];
+      seedBookings.forEach(b => map.set(b._id, b));
+    }
+
+    consumerBookings = Array.from(map.values());
+    renderConsumerDashboard(consumerBookings);
+  }
+
+  function renderConsumerDashboard(bookings) {
+    const activeContainer = document.getElementById('active-job-container');
+    const tbody = document.getElementById('bookings-tbody');
+
+    const activeList = bookings.filter(b => b.status === 'confirmed' || b.status === 'in_progress' || b.status === 'pending');
+    const completedList = bookings.filter(b => b.status === 'completed');
+
+    // Stats
+    document.getElementById('stat-active-count').textContent = activeList.length;
+    document.getElementById('stat-completed-count').textContent = 12 + completedList.length;
+    document.getElementById('stat-wallet-amount').textContent = `₹${250 + (completedList.length * 35)}`;
+    document.getElementById('booking-total-badge').textContent = `${bookings.length} Services`;
+
+    // Render Active Card
+    const latestActive = activeList[0] || bookings[0];
+    if (latestActive) {
+      const s = latestActive.service || { title: 'Home Deep Cleaning & Sanitization', basePrice: 1299 };
+      const p = latestActive.provider || { name: 'Sunita Devi', avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&q=80', averageRating: 4.95 };
+      const total = latestActive.totalAmount || s.basePrice || 1299;
+      const orderRef = (latestActive._id && latestActive._id.startsWith('BK-')) ? latestActive._id : ('#BK-' + (latestActive._id ? latestActive._id.slice(-6).toUpperCase() : '9042'));
+      const addr = (typeof latestActive.address === 'string' ? latestActive.address : latestActive.address?.street) || 'Flat 402, Green Meadows Residency';
+      const scheduledStr = `${latestActive.scheduledDate ? latestActive.scheduledDate.split('T')[0] : 'Tomorrow'}, ${latestActive.scheduledTime || '10:00 AM - 12:00 PM'}`;
+
+      const isCompleted = latestActive.status === 'completed';
+      const isProgress = latestActive.status === 'in_progress';
+
+      activeContainer.innerHTML = `
+        <div class="card" style="margin-bottom:36px; border-color:var(--primary); box-shadow:var(--shadow-glow);">
+          <div class="flex-between" style="margin-bottom:12px;">
+            <span class="badge ${isCompleted ? 'badge-success' : 'badge-primary'}">${isCompleted ? '✅ Job Completed' : '🚨 Live Active Service'}</span>
+            <span style="font-size:0.85rem; color:var(--text-muted);">Booking ${orderRef}</span>
+          </div>
+
+          <div class="flex-between" style="flex-wrap:wrap; gap:16px; margin-bottom:16px;">
+            <div>
+              <h3 style="font-size:1.3rem; margin-bottom:4px;">${s.title}</h3>
+              <p style="color:var(--text-secondary); font-size:0.88rem;">Scheduled: <strong>${scheduledStr}</strong> • ${addr}</p>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-family:var(--font-heading); font-size:1.4rem; font-weight:800; color:var(--accent);">₹${total.toLocaleString()}</div>
+              <span class="status ${isCompleted ? 'status-completed' : (isProgress ? 'status-in-progress' : 'status-confirmed')}">${isCompleted ? 'Completed' : (isProgress ? 'In Progress' : 'Provider Dispatched')}</span>
+            </div>
+          </div>
+
+          <!-- 4-Step Interactive Tracking Stepper -->
+          <div class="order-stepper">
+            <div class="step-item completed">
+              <div class="step-circle">✓</div>
+              <div class="step-label">Requested</div>
+            </div>
+            <div class="step-item completed">
+              <div class="step-circle">✓</div>
+              <div class="step-label">Assigned</div>
+            </div>
+            <div class="step-item ${isCompleted ? 'completed' : 'active'}">
+              <div class="step-circle">${isCompleted ? '✓' : '3'}</div>
+              <div class="step-label">On The Way</div>
+            </div>
+            <div class="step-item ${isCompleted ? 'completed' : ''}">
+              <div class="step-circle">${isCompleted ? '✓' : '4'}</div>
+              <div class="step-label">Completed</div>
+            </div>
+          </div>
+
+          <!-- Assigned Provider Info & Chat Launcher -->
+          <div style="background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-md); padding:16px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; margin-top:20px;">
+            <div style="display:flex; align-items:center; gap:14px;">
+              <img src="${p.avatar || 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&q=80'}" class="avatar avatar-md" alt="${p.name}" />
+              <div>
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <strong>${p.name} (Worker-Owner)</strong>
+                  <span class="badge badge-success">${p.averageRating || '4.95'}★</span>
+                </div>
+                <div style="font-size:0.8rem; color:var(--text-muted);">${s.category ? s.category.toUpperCase() : 'CO-OP'} Hygiene Lead • Punctual & KYC Verified</div>
+              </div>
+            </div>
+            <div style="display:flex; gap:10px;">
+              <button class="btn btn-outline btn-sm" onclick="toggleChatDrawer()">💬 Live Chat</button>
+              <button class="btn btn-primary btn-sm" onclick="showToast('Calling provider ${p.name}: +91 98222 33445', 'info')">📞 Call Provider</button>
+            </div>
+          </div>
+        </div>
+      `;
+    } else {
+      activeContainer.innerHTML = `
+        <div class="card" style="text-align:center; padding:48px 24px; margin-bottom:36px;">
+          <div style="font-size:3rem; margin-bottom:12px;">🏠</div>
+          <h3 style="margin-bottom:8px;">No active orders right now</h3>
+          <p style="color:var(--text-secondary); max-width:440px; margin:0 auto 20px;">
+            Need help with home cleaning, electrical repair, plumbing, or tutoring? Book with trusted cooperative worker-owners.
+          </p>
+          <a href="/services.html" class="btn btn-primary">+ Browse & Book Services</a>
+        </div>
+      `;
+    }
+
+    // Render Table Rows
+    tbody.innerHTML = bookings.map(b => {
+      const s = b.service || { title: 'Home Service', category: 'general' };
+      const p = b.provider || { name: 'Verified Provider', averageRating: 4.9 };
+      const dateStr = b.scheduledDate ? b.scheduledDate.split('T')[0] : '2026-08-28';
+      const total = b.totalAmount || 999;
+      const statusClass = b.status === 'completed' ? 'status-completed' : (b.status === 'confirmed' ? 'status-confirmed' : 'status-pending');
+      const statusLabel = b.status ? (b.status.charAt(0).toUpperCase() + b.status.slice(1)) : 'Confirmed';
+      const orderRef = (b._id && b._id.startsWith('BK-')) ? b._id : ('#BK-' + (b._id ? b._id.slice(-6).toUpperCase() : '9042'));
+
+      return `
+        <tr>
+          <td>
+            <div style="font-weight:700;">${s.title}</div>
+            <div style="font-size:0.75rem; color:var(--text-muted);">${orderRef}</div>
+          </td>
+          <td>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span>${p.name}</span>
+              <span style="color:var(--gold); font-size:0.8rem;">★ ${p.averageRating || '4.9'}</span>
+            </div>
+          </td>
+          <td>${dateStr}</td>
+          <td>
+            <div style="font-weight:700; color:var(--accent);">₹${total.toLocaleString()}</div>
+            <div style="font-size:0.7rem; color:var(--gold);">+${Math.floor(total / 100) * 5} pts</div>
+          </td>
+          <td><span class="status ${statusClass}">${statusLabel}</span></td>
+          <td>
+            <div style="display:flex; gap:6px;">
+              <button class="btn btn-ghost btn-sm" onclick="openBookingReceipt('${b._id}')">🧾 Receipt</button>
+              <button class="btn btn-outline btn-sm" onclick="openReviewModal('${p.name}', '${s.title}')">⭐ Review</button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function openBookingReceipt(bookingId) {
+    const b = consumerBookings.find(item => item._id === bookingId) || consumerBookings[0];
+    if (!b) return;
+
+    const s = b.service || { title: 'Home Deep Cleaning', basePrice: 1299 };
+    const p = b.provider || { name: 'Sunita Devi', averageRating: 4.95 };
+    const total = b.totalAmount || s.basePrice || 1299;
+    const orderRef = (b._id && b._id.startsWith('BK-')) ? b._id : ('#BK-' + (b._id ? b._id.slice(-6).toUpperCase() : '9042'));
+    const addr = (typeof b.address === 'string' ? b.address : b.address?.street) || 'Flat 402, Green Meadows';
+
+    document.getElementById('modal-rcpt-id').textContent = `Booking ${orderRef}`;
+    document.getElementById('modal-rcpt-service').textContent = s.title;
+    document.getElementById('modal-rcpt-status').textContent = b.status ? b.status.toUpperCase() : 'CONFIRMED';
+    document.getElementById('modal-rcpt-provider').textContent = `${p.name} (${p.averageRating || '4.95'}★)`;
+    document.getElementById('modal-rcpt-date').textContent = `${b.scheduledDate ? b.scheduledDate.split('T')[0] : 'Tomorrow'}, ${b.scheduledTime || '10:00 AM'}`;
+    document.getElementById('modal-rcpt-addr').textContent = addr;
+    document.getElementById('modal-rcpt-worker-pay').textContent = `₹${Math.round(total * 0.9).toLocaleString()}`;
+    document.getElementById('modal-rcpt-fee').textContent = `₹${Math.round(total * 0.1).toLocaleString()}`;
+    document.getElementById('modal-rcpt-equity').textContent = `+${Math.floor(total / 100) * 5} pts`;
+    document.getElementById('modal-rcpt-total').textContent = `₹${total.toLocaleString()}`;
+
+    openModal('receipt-modal');
+  }
+
+  document.addEventListener('DOMContentLoaded', loadConsumerDashboard);
+</script>
+</body>
+</html>

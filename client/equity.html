@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Worker Equity & Dividend Dashboard — GigCoop</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .equity-hero {
+      padding: 120px 0 50px;
+      background: var(--grad-hero);
+      text-align: center;
+    }
+    .equity-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    .dividend-calculator-card {
+      background: linear-gradient(145deg, rgba(37, 99, 235,0.12), rgba(20,184,166,0.06));
+      border: 1px solid rgba(37, 99, 235,0.3);
+      border-radius: var(--radius-xl);
+      padding: 32px;
+      margin-bottom: 40px;
+    }
+    @media (max-width: 900px) {
+      .equity-stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <a href="/" class="logo">
+      <div class="logo-icon">🏘️</div>
+      <span class="brand">GigCoop</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/services.html">Services</a></li>
+      <li><a href="/group-booking.html">Group Booking</a></li>
+      <li><a href="/voting.html">Governance</a></li>
+      <li><a href="/subscriptions.html">Plans</a></li>
+      <li><a href="/equity.html" class="active">Worker Equity</a></li>
+      <li><a href="/referral.html">Refer & Earn</a></li>
+    </ul>
+    <div class="nav-actions">
+      <select class="lang-selector" id="lang-selector">
+        <option value="en">🇬🇧 English</option>
+        <option value="hi">🇮🇳 हिन्दी</option>
+      </select>
+      <a href="/login.html" class="btn btn-ghost btn-sm" id="nav-login">Login</a>
+    </div>
+  </div>
+</nav>
+
+<section class="equity-hero">
+  <div class="container">
+    <div class="section-tag">💎 Worker-Owner Profit Sharing</div>
+    <h1 style="font-size:clamp(2rem, 4vw, 3.2rem); margin-bottom:12px;">Cooperative Equity & Dividend Ledger</h1>
+    <p style="color:var(--text-secondary); max-width:640px; margin:0 auto;">
+      Workers don't just work on GigCoop—they own the platform. Every completed service awards ownership points, converting labor into permanent equity and annual dividend payouts.
+    </p>
+  </div>
+</section>
+
+<section class="section-sm">
+  <div class="container">
+
+    <!-- KPI Cards -->
+    <div class="equity-stats-grid">
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background:rgba(37, 99, 235,0.15); color:var(--primary-light);">💎</div>
+        <div class="stat-card-value" id="stat-my-points">480</div>
+        <div class="stat-card-label">My Equity Points</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background:rgba(20,184,166,0.15); color:var(--accent);">📊</div>
+        <div class="stat-card-value" id="stat-my-percent">3.20%</div>
+        <div class="stat-card-label">Cooperative Stake %</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background:rgba(245,158,11,0.15); color:var(--gold);">💰</div>
+        <div class="stat-card-value" id="stat-est-dividend">₹42,800</div>
+        <div class="stat-card-label">Est. Annual Dividend</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background:rgba(16,185,129,0.15); color:var(--success);">🛡️</div>
+        <div class="stat-card-value">142</div>
+        <div class="stat-card-label">Active Worker-Owners</div>
+      </div>
+    </div>
+
+    <!-- Dividend Estimator Widget -->
+    <div class="dividend-calculator-card">
+      <div class="flex-between" style="flex-wrap:wrap; gap:20px; margin-bottom:20px;">
+        <div>
+          <h3>💡 Annual Profit Dividend Simulator</h3>
+          <p style="color:var(--text-secondary); font-size:0.9rem;">Adjust estimated annual platform surplus pool to calculate worker dividend distribution</p>
+        </div>
+        <div style="text-align:right;">
+          <span style="font-size:0.8rem; color:var(--text-muted);">Simulated Annual Payout</span>
+          <div style="font-family:var(--font-heading); font-size:2rem; font-weight:800; color:var(--accent);" id="calc-payout-val">₹42,800 / yr</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="flex-between" style="margin-bottom:8px; font-size:0.88rem;">
+          <label class="form-label" style="margin-bottom:0;">Annual Cooperative Net Surplus Pool</label>
+          <span style="font-weight:700; color:var(--primary-light);" id="pool-display">₹15,00,000 (15 Lakhs)</span>
+        </div>
+        <input type="range" id="surplus-range" min="500000" max="5000000" step="100000" value="1500000" style="width:100%; accent-color:var(--primary);" oninput="updateDividendSim(this.value)" />
+      </div>
+    </div>
+
+    <!-- Two-Column Layout: History Ledger & Leaderboard -->
+    <div class="grid-2" style="align-items:start; gap:32px;">
+      
+      <!-- Equity Points Ledger History -->
+      <div>
+        <h3 style="margin-bottom:16px;">📜 Recent Points Earnings Ledger</h3>
+        <div class="table-container">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Points</th>
+              </tr>
+            </thead>
+            <tbody id="ledger-rows">
+              <tr>
+                <td>28 Aug 2026</td>
+                <td>Electrical Job #bk_102 Completion</td>
+                <td style="color:var(--gold); font-weight:700;">+50 pts</td>
+              </tr>
+              <tr>
+                <td>15 Aug 2026</td>
+                <td>Independence Day 5★ Service Bonus</td>
+                <td style="color:var(--gold); font-weight:700;">+100 pts</td>
+              </tr>
+              <tr>
+                <td>01 Aug 2026</td>
+                <td>Monthly Safety & Punctuality Award</td>
+                <td style="color:var(--gold); font-weight:700;">+75 pts</td>
+              </tr>
+              <tr>
+                <td>20 Jul 2026</td>
+                <td>Apprentice Mentorship Workshop</td>
+                <td style="color:var(--gold); font-weight:700;">+50 pts</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Top Worker-Owner Leaderboard -->
+      <div>
+        <h3 style="margin-bottom:16px;">🏆 Worker-Owner Leaderboard</h3>
+        <div class="card" style="padding:16px;">
+          <div id="leaderboard-list" style="display:flex; flex-direction:column; gap:12px;">
+            <div class="flex-between" style="padding:10px; background:var(--bg-surface); border-radius:var(--radius-md);">
+              <div style="display:flex; align-items:center; gap:12px;">
+                <span style="font-size:1.2rem;">🥇</span>
+                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&q=80" class="avatar avatar-sm" alt="Sunita" />
+                <div>
+                  <strong style="font-size:0.9rem;">Sunita Devi</strong>
+                  <div style="font-size:0.75rem; color:var(--text-muted);">Hygiene Team Lead • Bandra</div>
+                </div>
+              </div>
+              <span class="badge badge-gold" style="font-weight:700;">650 Points</span>
+            </div>
+
+            <div class="flex-between" style="padding:10px; background:var(--bg-surface); border-radius:var(--radius-md); border:1px solid rgba(37, 99, 235,0.3);">
+              <div style="display:flex; align-items:center; gap:12px;">
+                <span style="font-size:1.2rem;">🥈</span>
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&q=80" class="avatar avatar-sm" alt="Rajesh" />
+                <div>
+                  <strong style="font-size:0.9rem;">Rajesh Kumar (You)</strong>
+                  <div style="font-size:0.75rem; color:var(--text-muted);">Electrical Lead • Powai</div>
+                </div>
+              </div>
+              <span class="badge badge-gold" style="font-weight:700;">480 Points</span>
+            </div>
+
+            <div class="flex-between" style="padding:10px; background:var(--bg-surface); border-radius:var(--radius-md);">
+              <div style="display:flex; align-items:center; gap:12px;">
+                <span style="font-size:1.2rem;">🥉</span>
+                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=120&q=80" class="avatar avatar-sm" alt="Deepa" />
+                <div>
+                  <strong style="font-size:0.9rem;">Deepa Nair</strong>
+                  <div style="font-size:0.75rem; color:var(--text-muted);">STEM Coaching • Bangalore</div>
+                </div>
+              </div>
+              <span class="badge badge-gold" style="font-weight:700;">420 Points</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer" style="margin-top:80px;">
+  <div class="container">
+    <div class="footer-bottom" style="border:none; padding:0;">
+      <p>© 2026 GigCoop. Worker ownership & economic justice.</p>
+      <a href="/voting.html" style="color:var(--primary-light);">Participate in Governance Voting →</a>
+    </div>
+  </div>
+</footer>
+
+<div class="toast-container" id="toast-container"></div>
+
+<script src="js/mockData.js"></script>
+<script src="js/i18n.js"></script>
+<script>
+  let myPoints = 480;
+  let stakePercent = 0.032;
+
+  function updateDividendSim(val) {
+    const amount = Number(val);
+    document.getElementById('pool-display').textContent = `₹${(amount/100000).toFixed(1)} Lakhs`;
+    const payout = Math.round(amount * stakePercent);
+    document.getElementById('calc-payout-val').textContent = `₹${payout.toLocaleString()} / yr`;
+  }
+
+  async function loadEquityData() {
+    try {
+      const res = await api('/equity/my');
+      if (res.data) {
+        document.getElementById('stat-my-points').textContent = res.data.myPoints || 480;
+        document.getElementById('stat-my-percent').textContent = (res.data.myPercentage || '3.20') + '%';
+      }
+    } catch {
+      // Fallback works automatically
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', loadEquityData);
+</script>
+</body>
+</html>

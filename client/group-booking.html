@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Society Group Bookings — GigCoop</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .group-hero {
+      padding: 120px 0 50px;
+      background: var(--grad-hero);
+      text-align: center;
+    }
+    .tier-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin: 40px 0;
+    }
+    .tier-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px 20px;
+      text-align: center;
+      position: relative;
+    }
+    .tier-card.active {
+      border-color: var(--accent);
+      box-shadow: 0 0 24px rgba(20,184,166,0.25);
+    }
+    .tier-discount {
+      font-family: var(--font-heading);
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--accent);
+      margin: 8px 0;
+    }
+    @media (max-width: 800px) {
+      .tier-bar { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <a href="/" class="logo">
+      <div class="logo-icon">🏘️</div>
+      <span class="brand">GigCoop</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/services.html">Services</a></li>
+      <li><a href="/group-booking.html" class="active">Group Booking</a></li>
+      <li><a href="/voting.html">Governance</a></li>
+      <li><a href="/subscriptions.html">Plans</a></li>
+      <li><a href="/equity.html">Worker Equity</a></li>
+      <li><a href="/referral.html">Refer & Earn</a></li>
+    </ul>
+    <div class="nav-actions">
+      <select class="lang-selector" id="lang-selector">
+        <option value="en">🇬🇧 English</option>
+        <option value="hi">🇮🇳 हिन्दी</option>
+      </select>
+      <a href="/login.html" class="btn btn-ghost btn-sm" id="nav-login">Login</a>
+      <button class="btn btn-primary btn-sm" onclick="openStartGroupModal()">+ Start Society Deal</button>
+    </div>
+  </div>
+</nav>
+
+<section class="group-hero">
+  <div class="container">
+    <div class="section-tag">🤝 Society Bulk Savings</div>
+    <h1 style="font-size:clamp(2rem, 4vw, 3.2rem); margin-bottom:12px;">Book With Your Neighbors & Save up to 30%</h1>
+    <p style="color:var(--text-secondary); max-width:620px; margin:0 auto;">
+      When multiple apartments in the same gated society or apartment block book services together, worker-owners save on transit travel time—and pass the massive savings directly to you!
+    </p>
+
+    <!-- Discount Tiers -->
+    <div class="tier-bar">
+      <div class="tier-card">
+        <span class="badge badge-primary">2 Homes</span>
+        <div class="tier-discount">5% OFF</div>
+        <p style="font-size:0.8rem; color:var(--text-muted);">Starter Neighbor Duo</p>
+      </div>
+      <div class="tier-card">
+        <span class="badge badge-teal">4 Homes</span>
+        <div class="tier-discount">15% OFF</div>
+        <p style="font-size:0.8rem; color:var(--text-muted);">Floor Cluster Deal</p>
+      </div>
+      <div class="tier-card active">
+        <span class="badge badge-gold">8 Homes</span>
+        <div class="tier-discount">25% OFF</div>
+        <p style="font-size:0.8rem; color:var(--text-muted);">Wing Mega Deal</p>
+      </div>
+      <div class="tier-card">
+        <span class="badge badge-success">15+ Homes</span>
+        <div class="tier-discount">30% OFF</div>
+        <p style="font-size:0.8rem; color:var(--text-muted);">Full Society Festival</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-sm">
+  <div class="container">
+    <div class="flex-between" style="margin-bottom:28px;">
+      <div>
+        <h2>Active Society Campaigns</h2>
+        <p style="color:var(--text-secondary); font-size:0.9rem;">Join an open group deal in your society or start one today</p>
+      </div>
+      <button class="btn btn-primary" onclick="openStartGroupModal()">🚀 Start New Group Deal</button>
+    </div>
+
+    <!-- Active Group Deals Grid -->
+    <div class="grid-2" id="group-deals-container" style="gap:24px;">
+      <!-- Populated via JavaScript -->
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ START GROUP DEAL MODAL ============================================================ -->
+<div class="modal-overlay" id="start-group-modal">
+  <div class="modal" style="max-width:540px;">
+    <div class="modal-header">
+      <div>
+        <h3>🏘️ Create Society Group Deal</h3>
+        <p style="color:var(--text-muted); font-size:0.85rem;">Invite neighbors to unlock up to 30% collective discounts</p>
+      </div>
+      <button class="modal-close" onclick="closeModal('start-group-modal')">✕</button>
+    </div>
+
+    <form id="create-group-form">
+      <div class="form-group">
+        <label class="form-label">Select Service</label>
+        <select id="gb-service" class="form-control" required>
+          <option value="svc_1">🧹 Full Home Deep Cleaning & Sanitization (₹1,299)</option>
+          <option value="svc_2">⚡ Complete Home Electrical Check & Fix (₹499)</option>
+          <option value="svc_3">🚰 Emergency Plumbing & Water Tank Repair (₹599)</option>
+          <option value="svc_5">❄️ AC Servicing, Deep Jet Wash & Gas Check (₹699)</option>
+          <option value="svc_6">🐜 Herbal Pest Control & Termite Defense (₹899)</option>
+        </select>
+      </div>
+
+      <div class="grid-2" style="gap:16px;">
+        <div class="form-group">
+          <label class="form-label">Society / Building Name</label>
+          <input type="text" id="gb-society" class="form-control" placeholder="e.g. Green Meadows Residency" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Your Flat Number</label>
+          <input type="text" id="gb-flat" class="form-control" placeholder="e.g. Flat 402, B Wing" required />
+        </div>
+      </div>
+
+      <div class="grid-2" style="gap:16px;">
+        <div class="form-group">
+          <label class="form-label">Service Date</label>
+          <input type="date" id="gb-date" class="form-control" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Time Window</label>
+          <select id="gb-time" class="form-control">
+            <option>09:00 AM - 01:00 PM</option>
+            <option>02:00 PM - 06:00 PM</option>
+          </select>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; margin-top:10px;">
+        <span>Launch Deal & Get Shareable Invite Link</span> 🔗
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- ============================================================ JOIN GROUP MODAL ============================================================ -->
+<div class="modal-overlay" id="join-group-modal">
+  <div class="modal" style="max-width:480px;">
+    <div class="modal-header">
+      <div>
+        <h3 id="join-modal-title">Join Society Group Deal</h3>
+        <p style="color:var(--text-muted); font-size:0.85rem;" id="join-modal-sub">Green Meadows Residency</p>
+      </div>
+      <button class="modal-close" onclick="closeModal('join-group-modal')">✕</button>
+    </div>
+
+    <form id="join-deal-form">
+      <input type="hidden" id="join-deal-id" />
+      <div class="form-group">
+        <label class="form-label">Your Flat / Apartment Number</label>
+        <input type="text" id="join-flat-number" class="form-control" placeholder="e.g. Flat 604, A Wing" required />
+      </div>
+
+      <div style="background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-md); padding:16px; margin-bottom:20px;">
+        <div class="flex-between" style="margin-bottom:6px;">
+          <span style="color:var(--text-secondary);">Discounted Rate</span>
+          <span style="font-family:var(--font-heading); font-size:1.3rem; font-weight:800; color:var(--accent);" id="join-modal-price">₹1,104</span>
+        </div>
+        <p style="font-size:0.8rem; color:var(--text-muted);">Rate automatically drops even further if more neighbors join before expiry!</p>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">
+        <span>Confirm My Apartment Slot</span> ✅
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer" style="margin-top:80px;">
+  <div class="container">
+    <div class="footer-bottom" style="border:none; padding:0;">
+      <p>© 2026 GigCoop. Cooperative community savings.</p>
+      <a href="/services.html" style="color:var(--primary-light);">Browse Individual Services →</a>
+    </div>
+  </div>
+</footer>
+
+<div class="toast-container" id="toast-container"></div>
+
+<script src="js/mockData.js"></script>
+<script src="js/i18n.js"></script>
+<script>
+  let groupDeals = [];
+
+  async function loadGroupDeals() {
+    try {
+      const res = await api('/group-bookings');
+      groupDeals = (res.data && res.data.length > 0) ? res.data : (window.MOCK_DATA?.groupBookings || []);
+    } catch {
+      groupDeals = window.MOCK_DATA?.groupBookings || [];
+    }
+    renderGroupDeals();
+  }
+
+  function renderGroupDeals() {
+    const container = document.getElementById('group-deals-container');
+    if (!groupDeals || groupDeals.length === 0) {
+      container.innerHTML = `<div class="card" style="grid-column:1/-1; text-align:center; padding:40px;"><h3>No active society deals yet</h3><p style="color:var(--text-muted);">Be the first neighbor to start one!</p></div>`;
+      return;
+    }
+
+    container.innerHTML = groupDeals.map(d => {
+      const current = d.currentCount || d.participants?.length || 2;
+      const max = d.maxParticipants || 15;
+      const progressPercent = Math.min(Math.round((current / max) * 100), 100);
+      const discountPercent = current >= 15 ? 30 : (current >= 8 ? 25 : (current >= 4 ? 15 : 5));
+
+      return `
+        <div class="card animate-fade-up">
+          <div class="flex-between" style="margin-bottom:12px;">
+            <span class="badge badge-teal">🏘️ ${d.societyName}</span>
+            <span class="badge badge-gold">🔥 ${discountPercent}% Active Discount</span>
+          </div>
+          <h3 style="margin-bottom:6px;">${d.service?.title || 'Cooperative Group Deal'}</h3>
+          <p style="color:var(--text-secondary); font-size:0.88rem; margin-bottom:16px;">
+            Scheduled for: <strong>${d.scheduledDate || 'Next Tuesday'}</strong> at ${d.scheduledTime || '09:00 AM'}
+          </p>
+
+          <!-- Progress -->
+          <div style="margin-bottom:16px;">
+            <div class="flex-between" style="font-size:0.85rem; margin-bottom:6px;">
+              <span><strong>${current}</strong> neighbors joined</span>
+              <span style="color:var(--text-muted);">${max - current} slots remaining</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: ${progressPercent}%;"></div>
+            </div>
+          </div>
+
+          <!-- Participants Track -->
+          <div class="flex-between" style="margin-bottom:20px; align-items:center;">
+            <div class="participants-track">
+              ${(d.participants || []).slice(0, 5).map((p, idx) => `
+                <div class="participant-bubble" title="${p.apartment || p.user?.name || 'Neighbor'}">
+                  ${p.user?.name ? p.user.name[0] : (idx + 1)}
+                </div>
+              `).join('')}
+              ${current > 5 ? `<div class="participant-bubble">+${current - 5}</div>` : ''}
+            </div>
+            <div style="text-align:right;">
+              <span style="font-size:0.75rem; color:var(--text-muted); text-decoration:line-through;">₹${d.basePrice}</span>
+              <div style="font-family:var(--font-heading); font-size:1.4rem; font-weight:800; color:var(--accent);">₹${d.discountedPrice || Math.round(d.basePrice * (1 - discountPercent/100))}</div>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="flex" style="gap:10px;">
+            <button class="btn btn-primary btn-sm" style="flex:1; justify-content:center;" onclick="openJoinModal('${d._id}', '${d.societyName}', ${d.discountedPrice || d.basePrice})">
+              Join Society Deal
+            </button>
+            <button class="btn btn-ghost btn-sm" onclick="copyInviteLink('${d.shareableLink}')" title="Copy Invite Link">
+              🔗 Share
+            </button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function openStartGroupModal() {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 3);
+    document.getElementById('gb-date').value = tomorrow.toISOString().split('T')[0];
+
+    const user = Auth.getUser();
+    if (user && user.societyName) {
+      document.getElementById('gb-society').value = user.societyName;
+    }
+    openModal('start-group-modal');
+  }
+
+  document.getElementById('create-group-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const serviceId = document.getElementById('gb-service').value;
+    const societyName = document.getElementById('gb-society').value;
+    const apartment = document.getElementById('gb-flat').value;
+    const scheduledDate = document.getElementById('gb-date').value;
+    const scheduledTime = document.getElementById('gb-time').value;
+
+    const s = (window.MOCK_DATA?.services || []).find(item => item._id === serviceId) || { title: 'Group Clean', basePrice: 1299 };
+
+    const newDeal = {
+      _id: 'gb_' + Date.now(),
+      shareableLink: 'deal-' + Math.random().toString(36).substr(2, 6),
+      societyName,
+      service: s,
+      scheduledDate,
+      scheduledTime,
+      basePrice: s.basePrice,
+      discountedPrice: Math.round(s.basePrice * 0.95),
+      currentCount: 1,
+      maxParticipants: 15,
+      participants: [{ user: Auth.getUser(), apartment }]
+    };
+
+    const groupBookingRecord = {
+      _id: 'BK-GRP-' + Math.floor(1000 + Math.random() * 9000),
+      service: {
+        title: `[Host: ${societyName}] ${s.title}`,
+        category: s.category || 'group'
+      },
+      provider: s.provider || { name: 'Co-op Crew Lead', averageRating: 4.95 },
+      scheduledDate,
+      scheduledTime,
+      address: { street: `${apartment}, ${societyName}` },
+      totalAmount: Math.round(s.basePrice * 0.95),
+      status: 'confirmed',
+      createdAt: new Date().toISOString()
+    };
+    BookingHelper.save(groupBookingRecord);
+
+    groupDeals.unshift(newDeal);
+    renderGroupDeals();
+    closeModal('start-group-modal');
+    showToast('🎉 Group deal launched! Slot registered in your resident dashboard.', 'success');
+  });
+
+  function openJoinModal(dealId, societyName, price) {
+    document.getElementById('join-deal-id').value = dealId;
+    document.getElementById('join-modal-sub').textContent = societyName;
+    document.getElementById('join-modal-price').textContent = `₹${price.toLocaleString()}`;
+    openModal('join-group-modal');
+  }
+
+  document.getElementById('join-deal-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const dealId = document.getElementById('join-deal-id').value;
+    const flat = document.getElementById('join-flat-number').value;
+
+    const d = groupDeals.find(item => item._id === dealId) || groupDeals[0];
+    if (d) {
+      d.currentCount = (d.currentCount || 1) + 1;
+      if (!d.participants) d.participants = [];
+      d.participants.push({ user: Auth.getUser(), apartment: flat });
+      renderGroupDeals();
+
+      const s = d.service || { title: 'Society Group Service', basePrice: d.basePrice || 1299 };
+      const groupBookingRecord = {
+        _id: 'BK-GRP-' + Math.floor(1000 + Math.random() * 9000),
+        service: {
+          title: `[Society Deal: ${d.societyName}] ${s.title}`,
+          category: s.category || 'group'
+        },
+        provider: s.provider || { name: 'Assigned Co-op Crew', averageRating: 4.95 },
+        scheduledDate: d.scheduledDate || '2026-11-05',
+        scheduledTime: d.scheduledTime || '09:00 AM - 01:00 PM',
+        address: { street: `${flat}, ${d.societyName}` },
+        totalAmount: d.discountedPrice || Math.round((d.basePrice || 1299) * 0.85),
+        status: 'confirmed',
+        createdAt: new Date().toISOString()
+      };
+      BookingHelper.save(groupBookingRecord);
+    }
+
+    closeModal('join-group-modal');
+    showToast('✅ Joined group deal! Slot registered in your resident dashboard.', 'success');
+  });
+
+  function copyInviteLink(code) {
+    const link = `${window.location.origin}/group-booking.html?code=${code}`;
+    navigator.clipboard.writeText(link);
+    showToast('📋 Society invite link copied to clipboard!', 'success');
+  }
+
+  function openModal(id) { document.getElementById(id).classList.add('open'); }
+  function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+  document.addEventListener('DOMContentLoaded', loadGroupDeals);
+</script>
+</body>
+</html>

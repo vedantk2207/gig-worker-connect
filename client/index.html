@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GigCoop — Cooperative Gig Services Platform</title>
+  <meta name="description" content="Connect with trusted local service providers for cleaning, repairs, tutoring, and more. A worker-owned cooperative platform for household and community services." />
+  <meta name="keywords" content="gig services, home services, cooperative, cleaning, plumbing, electrical, tutoring" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* Extra inline animations for landing page */
+    .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+    .floating-cards { position: relative; height: 480px; }
+    .fcard {
+      position: absolute; background: var(--bg-card);
+      border: 1px solid var(--border); border-radius: var(--radius-lg);
+      padding: 20px; box-shadow: var(--shadow-lg);
+      transition: var(--transition);
+    }
+    .fcard:hover { transform: translateY(-4px) !important; border-color: var(--border-hover); }
+    .fcard-1 { top: 0; left: 0; width: 260px; animation: float1 6s ease-in-out infinite; }
+    .fcard-2 { top: 100px; right: 0; width: 240px; animation: float2 8s ease-in-out infinite; }
+    .fcard-3 { bottom: 30px; left: 60px; width: 280px; animation: float3 7s ease-in-out infinite; }
+    @keyframes float1 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)} }
+    @keyframes float2 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(14px)} }
+    @keyframes float3 { 0%,transform:translateY(0) 50%{transform:translateY(-10px)} }
+
+    .service-emoji-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .service-emoji-item {
+      background: var(--bg-glass); border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 16px 12px;
+      text-align: center; cursor: pointer; transition: var(--transition-spring);
+    }
+    .service-emoji-item:hover { background: rgba(37, 99, 235,0.12); border-color: rgba(37, 99, 235,0.3); transform: translateY(-3px); }
+    .service-emoji-item .emoji { font-size: 1.8rem; display: block; margin-bottom: 6px; }
+    .service-emoji-item span:last-child { font-size: 0.75rem; color: var(--text-muted); }
+
+    .how-it-works { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; position: relative; }
+    .how-it-works::before {
+      content: '';
+      position: absolute; top: 40px; left: 10%; right: 10%;
+      height: 1px; background: linear-gradient(90deg, transparent, var(--primary), transparent);
+    }
+    .step-card { text-align: center; position: relative; }
+    .step-number {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: var(--grad-primary); display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-heading); font-size: 1.8rem; font-weight: 800; color: #fff;
+      margin: 0 auto 20px; box-shadow: 0 0 30px rgba(37, 99, 235,0.3);
+      position: relative; z-index: 1;
+    }
+    .step-card h3 { font-size: 1rem; margin-bottom: 8px; }
+    .step-card p { font-size: 0.85rem; color: var(--text-muted); }
+
+    .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .testimonial-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 28px;
+      transition: var(--transition);
+    }
+    .testimonial-card:hover { transform: translateY(-4px); border-color: var(--border-hover); }
+    .testimonial-stars { color: var(--gold); font-size: 1rem; margin-bottom: 14px; }
+    .testimonial-text { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; margin-bottom: 20px; font-style: italic; }
+    .testimonial-author { display: flex; align-items: center; gap: 12px; }
+    .testimonial-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--grad-primary); display: flex; align-items: center; justify-content: center; font-weight: 700; color: #fff; font-size: 1rem; }
+    .testimonial-name { font-weight: 600; font-size: 0.9rem; }
+    .testimonial-role { font-size: 0.78rem; color: var(--text-muted); }
+
+    .cta-section {
+      background: linear-gradient(135deg, rgba(37, 99, 235,0.15), rgba(20,184,166,0.1));
+      border: 1px solid rgba(37, 99, 235,0.2); border-radius: var(--radius-xl);
+      padding: 80px 60px; text-align: center; position: relative; overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute; width: 400px; height: 400px; border-radius: 50%;
+      background: var(--primary); opacity: 0.05; filter: blur(60px);
+      top: -100px; left: -100px;
+    }
+
+    .marquee-wrapper { overflow: hidden; padding: 20px 0; }
+    .marquee-track {
+      display: flex; gap: 24px;
+      animation: marquee 25s linear infinite;
+      width: max-content;
+    }
+    .marquee-track:hover { animation-play-state: paused; }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .marquee-item {
+      display: flex; align-items: center; gap: 12px;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius-full); padding: 12px 24px;
+      white-space: nowrap; font-size: 0.9rem; color: var(--text-secondary);
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .floating-cards { display: none; }
+      .how-it-works { grid-template-columns: repeat(2, 1fr); }
+      .how-it-works::before { display: none; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .service-emoji-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================ NAVBAR ============================================================ -->
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <a href="/" class="logo" id="logo-link">
+      <div class="logo-icon">🏘️</div>
+      <span class="brand">GigCoop</span>
+    </a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="/" class="active" data-i18n="nav_home">Home</a></li>
+      <li><a href="/services.html" data-i18n="nav_services">Services</a></li>
+      <li><a href="/group-booking.html">Group Booking</a></li>
+      <li><a href="/voting.html">Governance</a></li>
+      <li><a href="/subscriptions.html">Plans</a></li>
+      <li><a href="/equity.html">Worker Equity</a></li>
+      <li><a href="/referral.html">Refer & Earn</a></li>
+    </ul>
+    <div class="nav-actions">
+      <select class="lang-selector" id="lang-selector" title="Select Language">
+        <option value="en">🌐 English</option>
+        <option value="hi">हिन्दी</option>
+      </select>
+      <a href="/login.html" class="btn btn-ghost btn-sm" id="nav-login" data-i18n="nav_login">Login</a>
+      <a href="/register.html" class="btn btn-primary btn-sm" id="nav-register" data-i18n="nav_register">Register</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============================================================ LIVE TICKER ============================================================ -->
+<div class="live-ticker-bar" style="margin-top: 72px;">
+  <div class="ticker-content">
+    <div class="ticker-pill"><span class="badge badge-success" style="font-size:0.7rem; padding:2px 8px;">● LIVE</span> <span>Sunita Devi</span> completed 5★ Deep Cleaning in Bandra (+65 Equity Pts)</div>
+    <div class="ticker-pill"><span class="badge badge-primary" style="font-size:0.7rem; padding:2px 8px;">⚡ ELECTRICAL</span> <span>Rajesh Kumar</span> resolved circuit breaker in Powai (+35 Equity Pts)</div>
+    <div class="ticker-pill"><span class="badge badge-teal" style="font-size:0.7rem; padding:2px 8px;">🏢 GROUP SAVINGS</span> <strong>Green Meadows Residency</strong> unlocked 20% Group Booking Discount</div>
+    <div class="ticker-pill"><span class="badge badge-gold" style="font-size:0.7rem; padding:2px 8px;">🗳️ GOVERNANCE</span> Resolution #12 (Healthcare Safety Net) passed with 96% worker approval</div>
+    <div class="ticker-pill"><span class="badge badge-primary" style="font-size:0.7rem; padding:2px 8px;">💎 SURPLUS POOL</span> Q3 Platform Surplus Pool reached <strong>₹15,00,000</strong> for worker-owners</div>
+    <!-- Duplicate for infinite seamless scroll -->
+    <div class="ticker-pill"><span class="badge badge-success" style="font-size:0.7rem; padding:2px 8px;">● LIVE</span> <span>Sunita Devi</span> completed 5★ Deep Cleaning in Bandra (+65 Equity Pts)</div>
+    <div class="ticker-pill"><span class="badge badge-primary" style="font-size:0.7rem; padding:2px 8px;">⚡ ELECTRICAL</span> <span>Rajesh Kumar</span> resolved circuit breaker in Powai (+35 Equity Pts)</div>
+    <div class="ticker-pill"><span class="badge badge-teal" style="font-size:0.7rem; padding:2px 8px;">🏢 GROUP SAVINGS</span> <strong>Green Meadows Residency</strong> unlocked 20% Group Booking Discount</div>
+  </div>
+</div>
+
+<!-- ============================================================ HERO ============================================================ -->
+<section class="hero" id="home" style="padding-top: 40px;">
+  <div class="hero-blob hero-blob-1"></div>
+  <div class="hero-blob hero-blob-2"></div>
+  <div class="container">
+    <div class="hero-grid">
+      <div class="hero-content animate-fade-up">
+        <div class="hero-badge">
+          <span class="hero-badge-dot"></span>
+          India's First Worker-Owned Gig Cooperative Platform
+        </div>
+        <h1 data-i18n="hero_title">
+          Your Community.<br/>
+          Your Services.<br/>
+          <span class="gradient-text">Your Platform.</span>
+        </h1>
+        <p data-i18n="hero_subtitle">
+          Connect with trusted local service providers. Book cleaning, repairs, tutoring, and more — all powered by a cooperative where <strong>workers own 100% of the platform.</strong>
+        </p>
+        <div class="hero-actions">
+          <a href="/services.html" class="btn btn-primary btn-lg" id="cta-find-services">
+            🔍 Find Services
+          </a>
+          <a href="/register.html?role=provider" class="btn btn-outline btn-lg" id="cta-become-provider">
+            💼 Join as Worker-Owner
+          </a>
+        </div>
+
+        <!-- Interactive Instant Service Estimator & Fast-Booker Widget -->
+        <div class="hero-instant-box animate-fade-up delay-1">
+          <div class="flex-between" style="margin-bottom:12px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:1.1rem;">⚡</span>
+              <strong style="font-size:0.95rem;">Instant Fair Rate Benchmark</strong>
+            </div>
+            <span class="badge badge-teal">Zero Platform Surge</span>
+          </div>
+
+          <div class="instant-service-selector" id="hero-instant-tabs">
+            <button type="button" class="instant-service-btn active" onclick="selectHeroEstimate('cleaning', 1299, 1169, 65, 'Sunita Devi (4.95★)', this)">
+              <span style="display:block; font-size:1.2rem; margin-bottom:2px;">🧹</span>
+              <span style="font-size:0.78rem; font-weight:600;">Deep Clean</span>
+            </button>
+            <button type="button" class="instant-service-btn" onclick="selectHeroEstimate('electrical', 499, 449, 25, 'Rajesh Kumar (4.9★)', this)">
+              <span style="display:block; font-size:1.2rem; margin-bottom:2px;">⚡</span>
+              <span style="font-size:0.78rem; font-weight:600;">Electrician</span>
+            </button>
+            <button type="button" class="instant-service-btn" onclick="selectHeroEstimate('plumbing', 599, 539, 30, 'Amit Patel (4.8★)', this)">
+              <span style="display:block; font-size:1.2rem; margin-bottom:2px;">🚰</span>
+              <span style="font-size:0.78rem; font-weight:600;">Plumber</span>
+            </button>
+            <button type="button" class="instant-service-btn" onclick="selectHeroEstimate('ac', 699, 629, 35, 'Rajesh Kumar (4.9★)', this)">
+              <span style="display:block; font-size:1.2rem; margin-bottom:2px;">❄️</span>
+              <span style="font-size:0.78rem; font-weight:600;">AC Service</span>
+            </button>
+          </div>
+
+          <div class="instant-price-row">
+            <div>
+              <div style="font-size:0.75rem; color:var(--text-muted);">Cooperative Rate:</div>
+              <div style="font-family:var(--font-heading); font-size:1.6rem; font-weight:800; color:var(--accent);" id="hero-est-price">₹1,299</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:0.75rem; color:var(--text-muted);">Worker Payout (90%):</div>
+              <div style="font-weight:700; color:#34d399; font-size:1rem;" id="hero-est-payout">₹1,169</div>
+            </div>
+            <div style="text-align:right;">
+              <a href="/services.html?category=cleaning" class="btn btn-primary btn-sm" id="hero-est-book-btn">
+                <span>Instant Book</span> →
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-stats" style="margin-top:28px;">
+          <div class="stat-item">
+            <div class="stat-value" id="stat-providers">2,400+</div>
+            <div class="stat-label">Verified Providers</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="stat-bookings">18K+</div>
+            <div class="stat-label">Bookings Completed</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="stat-cities">32</div>
+            <div class="stat-label">Cities Covered</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="stat-rating">4.8★</div>
+            <div class="stat-label">Avg. Rating</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Floating UI Cards -->
+      <div class="floating-cards animate-fade-in delay-2">
+        <!-- AI Match Card -->
+        <a href="/services.html" class="fcard fcard-1" style="display:block; color:inherit; text-decoration:none;">
+          <div class="flex-between" style="margin-bottom:10px;">
+            <div style="font-size:0.75rem; color:var(--text-muted);">🤖 AI Best Match</div>
+            <span class="badge badge-primary" style="font-size:0.7rem;">96% Match</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&q=80" class="avatar avatar-md" alt="Rajesh Kumar" />
+            <div>
+              <div style="font-weight:600; font-size:0.9rem;">Rajesh Kumar</div>
+              <div style="font-size:0.78rem; color:var(--text-muted);">⚡ Master Electrician</div>
+            </div>
+          </div>
+          <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <span class="badge badge-gold">⭐ 4.9 (84)</span>
+            <span class="badge badge-success">✓ Verified</span>
+            <span class="badge badge-teal">💎 480 pts</span>
+          </div>
+        </a>
+
+        <!-- Group Booking Card -->
+        <a href="/group-booking.html" class="fcard fcard-2" style="display:block; color:inherit; text-decoration:none;">
+          <div class="flex-between" style="margin-bottom:8px;">
+            <div style="font-size:0.75rem; color:var(--text-muted);">🏢 Active Society Deal</div>
+            <span class="badge badge-gold" style="font-size:0.7rem;">-20% OFF</span>
+          </div>
+          <div style="font-weight:600; font-size:0.88rem; margin-bottom:8px;">Green Meadows Residency</div>
+          <div class="progress-bar" style="margin-bottom:6px;">
+            <div class="progress-fill" style="width:70%"></div>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-size:0.78rem; color:var(--text-muted);">
+            <span>4 / 15 neighbors joined</span>
+            <span style="color:#34d399; font-weight:600;">Save ₹200/flat</span>
+          </div>
+        </a>
+
+        <!-- Price Estimator Card -->
+        <a href="/services.html" class="fcard fcard-3" style="display:block; color:inherit; text-decoration:none;">
+          <div class="flex-between" style="margin-bottom:10px;">
+            <div style="font-size:0.75rem; color:var(--text-muted);">💡 AI Price Benchmark</div>
+            <span class="badge badge-teal" style="font-size:0.7rem;">Fair Wage</span>
+          </div>
+          <div style="font-weight:600; font-size:0.88rem; margin-bottom:10px;">Home Deep Cleaning · Mumbai</div>
+          <div class="price-range-bar">
+            <div class="price-range-fill"></div>
+          </div>
+          <div class="price-labels" style="font-size:0.78rem;">
+            <div class="price-label-item"><div class="price-label-value" style="color:var(--text-secondary);">₹800</div><div class="price-label-text">Min</div></div>
+            <div class="price-label-item"><div class="price-label-value" style="color:var(--accent);">₹1,299</div><div class="price-label-text">Fair</div></div>
+            <div class="price-label-item"><div class="price-label-value" style="color:var(--text-muted);">₹2,200</div><div class="price-label-text">Surge Cap</div></div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ MARQUEE ============================================================ -->
+<div style="padding: 40px 0; background: var(--bg-surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="marquee-wrapper">
+    <div class="marquee-track" id="marquee-track">
+      <div class="marquee-item">🧹 Home Cleaning</div>
+      <div class="marquee-item">🔧 Plumbing</div>
+      <div class="marquee-item">⚡ Electrical</div>
+      <div class="marquee-item">🪵 Carpentry</div>
+      <div class="marquee-item">🌿 Gardening</div>
+      <div class="marquee-item">🎨 Painting</div>
+      <div class="marquee-item">🐛 Pest Control</div>
+      <div class="marquee-item">👶 Babysitting</div>
+      <div class="marquee-item">📚 Tutoring</div>
+      <div class="marquee-item">👴 Elder Care</div>
+      <div class="marquee-item">📦 Moving Help</div>
+      <div class="marquee-item">🎉 Event Setup</div>
+      <!-- Duplicate for infinite effect -->
+      <div class="marquee-item">🧹 Home Cleaning</div>
+      <div class="marquee-item">🔧 Plumbing</div>
+      <div class="marquee-item">⚡ Electrical</div>
+      <div class="marquee-item">🪵 Carpentry</div>
+      <div class="marquee-item">🌿 Gardening</div>
+      <div class="marquee-item">🎨 Painting</div>
+      <div class="marquee-item">🐛 Pest Control</div>
+      <div class="marquee-item">👶 Babysitting</div>
+      <div class="marquee-item">📚 Tutoring</div>
+      <div class="marquee-item">👴 Elder Care</div>
+      <div class="marquee-item">📦 Moving Help</div>
+      <div class="marquee-item">🎉 Event Setup</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ FEATURES ============================================================ -->
+<section class="section" id="features">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag">✨ What Makes Us Different</div>
+      <h2 data-i18n="features_title">Why Choose <span class="gradient-text">GigCoop?</span></h2>
+      <p>We're not just another gig platform. We're a cooperative built for communities, powered by AI, and owned by the workers.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card reveal delay-1">
+        <div class="feature-icon">🧾</div>
+        <h3 data-i18n="feature_1_title">Worker Equity / Co-op Shares</h3>
+        <p data-i18n="feature_1_desc">Every completed job earns providers equity points. They literally own a share of this platform and receive profit dividends.</p>
+        <div class="feature-badge"><span class="badge badge-gold">🏆 Exclusive Feature</span></div>
+      </div>
+      <div class="feature-card reveal delay-2">
+        <div class="feature-icon">🗳️</div>
+        <h3>Community Voting Panel</h3>
+        <p>Platform fees, new features, policy changes — all decided by community votes. Your voice shapes the platform.</p>
+        <div class="feature-badge"><span class="badge badge-gold">🏆 Exclusive Feature</span></div>
+      </div>
+      <div class="feature-card reveal delay-3">
+        <div class="feature-icon">🤖</div>
+        <h3 data-i18n="feature_2_title">AI Smart Job Matching</h3>
+        <p data-i18n="feature_2_desc">Our AI finds the best-matched provider for you with a 0-100 match score based on skill, location, rating, and history.</p>
+        <div class="feature-badge"><span class="badge badge-gold">🏆 Exclusive Feature</span></div>
+      </div>
+      <div class="feature-card reveal delay-1">
+        <div class="feature-icon">💰</div>
+        <h3>AI Price Estimator</h3>
+        <p>Know the fair price before you book. Our AI analyzes local market data to give you a min/fair/max price range.</p>
+        <div class="feature-badge"><span class="badge badge-gold">🏆 Exclusive Feature</span></div>
+      </div>
+      <div class="feature-card reveal delay-2">
+        <div class="feature-icon">🏢</div>
+        <h3 data-i18n="feature_3_title">Society / Group Booking</h3>
+        <p data-i18n="feature_3_desc">Book as a group with your society or apartment building. More people = bigger discount. Up to 30% off!</p>
+        <div class="feature-badge"><span class="badge badge-gold">🏆 Exclusive Feature</span></div>
+      </div>
+      <div class="feature-card reveal delay-3">
+        <div class="feature-icon">📦</div>
+        <h3 data-i18n="feature_5_title">Subscription Home Plans</h3>
+        <p data-i18n="feature_5_desc">Choose a monthly maintenance plan. Services get auto-scheduled. Never forget a cleaning or maintenance job again.</p>
+        <div class="feature-badge"><span class="badge badge-gold">🏆 Exclusive Feature</span></div>
+      </div>
+      <div class="feature-card reveal delay-1">
+        <div class="feature-icon">🌐</div>
+        <h3>Vernacular Language Support</h3>
+        <p>Use the full platform in Hindi, Tamil, Bengali, Telugu, Kannada, and Marathi. Truly inclusive for all providers.</p>
+        <div class="feature-badge"><span class="badge badge-gold">🏆 Exclusive Feature</span></div>
+      </div>
+      <div class="feature-card reveal delay-2">
+        <div class="feature-icon">🎁</div>
+        <h3 data-i18n="feature_6_title">Refer & Earn for Communities</h3>
+        <p data-i18n="feature_6_desc">Your colony gets a unique referral link. Every booking earns you cashback in your wallet. Top communities win prizes!</p>
+        <div class="feature-badge"><span class="badge badge-gold">🏆 Exclusive Feature</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ SERVICES ============================================================ -->
+<section class="section" id="services" style="background: var(--bg-surface);">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag">🏠 Browse by Category</div>
+      <h2 data-i18n="categories_title">All <span class="gradient-text">Services</span></h2>
+      <p>From everyday cleaning to specialized repairs — find any service your home or community needs.</p>
+    </div>
+    <div class="service-emoji-grid reveal" id="service-categories">
+      <div class="service-emoji-item" onclick="goToServices('cleaning')"><span class="emoji">🧹</span><span>Cleaning</span></div>
+      <div class="service-emoji-item" onclick="goToServices('plumbing')"><span class="emoji">🔧</span><span>Plumbing</span></div>
+      <div class="service-emoji-item" onclick="goToServices('electrical')"><span class="emoji">⚡</span><span>Electrical</span></div>
+      <div class="service-emoji-item" onclick="goToServices('carpentry')"><span class="emoji">🪵</span><span>Carpentry</span></div>
+      <div class="service-emoji-item" onclick="goToServices('painting')"><span class="emoji">🎨</span><span>Painting</span></div>
+      <div class="service-emoji-item" onclick="goToServices('pest_control')"><span class="emoji">🐛</span><span>Pest Control</span></div>
+      <div class="service-emoji-item" onclick="goToServices('gardening')"><span class="emoji">🌿</span><span>Gardening</span></div>
+      <div class="service-emoji-item" onclick="goToServices('babysitting')"><span class="emoji">👶</span><span>Babysitting</span></div>
+      <div class="service-emoji-item" onclick="goToServices('elder_care')"><span class="emoji">👴</span><span>Elder Care</span></div>
+      <div class="service-emoji-item" onclick="goToServices('tutoring')"><span class="emoji">📚</span><span>Tutoring</span></div>
+      <div class="service-emoji-item" onclick="goToServices('moving')"><span class="emoji">📦</span><span>Moving</span></div>
+      <div class="service-emoji-item" onclick="goToServices('event_help')"><span class="emoji">🎉</span><span>Event Help</span></div>
+    </div>
+    <div style="text-align:center; margin-top: 40px;">
+      <a href="/services.html" class="btn btn-primary btn-lg" id="btn-view-all">View All Services →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ HOW IT WORKS ============================================================ -->
+<section class="section" id="how-it-works">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag">📖 Getting Started</div>
+      <h2>How It <span class="gradient-text">Works</span></h2>
+      <p>Booking a service takes less than 2 minutes. Here's how.</p>
+    </div>
+    <div class="how-it-works reveal">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <h3>Find Your Service</h3>
+        <p>Browse categories or let AI match you with the best provider in your area.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <h3>Check AI Price</h3>
+        <p>Know the fair price range before you even talk to anyone.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <h3>Book & Chat</h3>
+        <p>Schedule your slot. Chat with the provider in real-time.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">4</div>
+        <h3>Done & Review</h3>
+        <p>Service completed. Pay securely. Rate your experience.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ TESTIMONIALS ============================================================ -->
+<section class="section" style="background: var(--bg-surface);" id="testimonials">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag">💬 What People Say</div>
+      <h2>Loved by <span class="gradient-text">Communities</span></h2>
+    </div>
+    <div class="testimonials-grid reveal">
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"The group booking feature saved our society ₹400 per flat! 10 of us booked deep cleaning together and got 25% off. Brilliant idea!"</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">P</div>
+          <div>
+            <div class="testimonial-name">Priya Sharma</div>
+            <div class="testimonial-role">Society Manager, Pune</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"Maine 3 mahine mein 8,000 equity points kamaye. Yeh sach mein mera platform hai. Pehli baar laga ki gig work mein bhi ownership milti hai."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">R</div>
+          <div>
+            <div class="testimonial-name">Ramesh Yadav</div>
+            <div class="testimonial-role">Electrician, Mumbai</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"The AI matched me with a 96% score provider, and it was spot on. The price estimator told me exactly what's fair. No more bargaining stress!"</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">A</div>
+          <div>
+            <div class="testimonial-name">Ananya Krishnan</div>
+            <div class="testimonial-role">Customer, Bangalore</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ SUBSCRIPTIONS PREVIEW ============================================================ -->
+<section class="section" id="plans">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag">📦 Subscription Plans</div>
+      <h2>Home Maintenance <span class="gradient-text">Made Easy</span></h2>
+      <p>Subscribe once. Get your home maintained automatically every month.</p>
+    </div>
+    <div class="grid-3 reveal" id="plans-grid">
+      <div class="plan-card">
+        <h3>Basic</h3>
+        <div class="plan-price">₹699<span style="font-size:1rem; color:var(--text-muted)">/mo</span></div>
+        <div class="plan-price-label">2 services per month</div>
+        <ul class="plan-features">
+          <li>1x Home Cleaning</li>
+          <li>1x Any Service</li>
+          <li>Priority support</li>
+          <li>10% wallet cashback</li>
+        </ul>
+        <a href="/subscriptions.html" class="btn btn-outline" style="width:100%">Get Started</a>
+      </div>
+      <div class="plan-card popular">
+        <div class="plan-popular-badge">⭐ Most Popular</div>
+        <h3>Standard</h3>
+        <div class="plan-price" style="background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">₹1,299<span style="font-size:1rem; color:var(--text-muted)">/mo</span></div>
+        <div class="plan-price-label">5 services per month</div>
+        <ul class="plan-features">
+          <li>2x Home Cleaning</li>
+          <li>1x Plumbing/Electrical</li>
+          <li>2x Any Service</li>
+          <li>15% wallet cashback</li>
+          <li>Emergency priority</li>
+        </ul>
+        <a href="/subscriptions.html" class="btn btn-primary" style="width:100%">Get Started</a>
+      </div>
+      <div class="plan-card">
+        <h3>Premium</h3>
+        <div class="plan-price">₹2,499<span style="font-size:1rem; color:var(--text-muted)">/mo</span></div>
+        <div class="plan-price-label">Unlimited services</div>
+        <ul class="plan-features">
+          <li>Unlimited Cleaning</li>
+          <li>All repair services</li>
+          <li>Dedicated provider</li>
+          <li>25% wallet cashback</li>
+          <li>Same-day booking</li>
+        </ul>
+        <a href="/subscriptions.html" class="btn btn-outline" style="width:100%">Get Started</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ CTA ============================================================ -->
+<section class="section-sm" id="cta">
+  <div class="container">
+    <div class="cta-section reveal">
+      <div class="section-tag" style="margin: 0 auto 20px;">🚀 Ready to Join?</div>
+      <h2 style="margin-bottom: 16px;">Join <span class="gradient-text">10,000+</span> Community Members</h2>
+      <p style="color:var(--text-secondary); max-width:480px; margin: 0 auto 36px; line-height:1.8;">
+        Whether you need services or want to offer them — GigCoop is the platform that works <em>for</em> you.
+      </p>
+      <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
+        <a href="/register.html" class="btn btn-primary btn-lg" id="cta-register">🎉 Get Started Free</a>
+        <a href="/register.html?role=provider" class="btn btn-outline btn-lg" id="cta-provider">💼 Join as Provider</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ FOOTER ============================================================ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="/" class="logo" style="margin-bottom:12px; display:inline-flex;">
+          <div class="logo-icon">🏘️</div>
+          <span class="brand">GigCoop</span>
+        </a>
+        <p data-i18n="footer_tagline">Empowering communities through cooperative gig services. Workers own the platform. Communities thrive together.</p>
+        <div style="display:flex; gap:12px; margin-top:20px;">
+          <a href="#" style="color:var(--text-muted); font-size:1.2rem;" title="Twitter">🐦</a>
+          <a href="#" style="color:var(--text-muted); font-size:1.2rem;" title="Instagram">📸</a>
+          <a href="#" style="color:var(--text-muted); font-size:1.2rem;" title="LinkedIn">💼</a>
+          <a href="#" style="color:var(--text-muted); font-size:1.2rem;" title="YouTube">▶️</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Platform</h4>
+        <ul>
+          <li><a href="/services.html">Browse Services</a></li>
+          <li><a href="/subscriptions.html">Subscription Plans</a></li>
+          <li><a href="/group-booking.html">Group Booking</a></li>
+          <li><a href="/voting.html">Community Voting</a></li>
+          <li><a href="/referral.html">Refer & Earn</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Providers</h4>
+        <ul>
+          <li><a href="/register.html?role=provider">Join as Provider</a></li>
+          <li><a href="/equity.html">Equity Dashboard</a></li>
+          <li><a href="#">Training Hub</a></li>
+          <li><a href="#">Welfare Fund</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2024 GigCoop. Made with ❤️ for communities across India.</p>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <span class="badge badge-primary">🔒 Secure Payments</span>
+        <span class="badge badge-success">✓ KYC Verified</span>
+        <span class="badge badge-teal">🤝 Co-op Certified</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toast-container"></div>
+
+<script src="js/mockData.js"></script>
+<script src="js/i18n.js"></script>
+<script>
+  // Navbar scroll effect
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) navbar.classList.add('scrolled');
+    else navbar.classList.remove('scrolled');
+  });
+
+  // Navigate to services with category
+  function goToServices(category) {
+    window.location.href = `/services.html?category=${category}`;
+  }
+
+  // Intersection Observer for reveal animations
+  const revealElements = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  revealElements.forEach(el => observer.observe(el));
+
+  // Auth state check
+  const token = localStorage.getItem('gigcoop_token');
+  const user = JSON.parse(localStorage.getItem('gigcoop_user') || 'null');
+  if (token && user) {
+    document.getElementById('nav-login').textContent = '📊 Dashboard';
+    document.getElementById('nav-login').href = `/dashboard-${user.role}.html`;
+  }
+
+  // Hero Instant Estimate Switcher
+  function selectHeroEstimate(category, price, payout, equity, provider, el) {
+    document.querySelectorAll('.instant-service-btn').forEach(btn => btn.classList.remove('active'));
+    if (el) el.classList.add('active');
+    document.getElementById('hero-est-price').textContent = `₹${price.toLocaleString()}`;
+    document.getElementById('hero-est-payout').textContent = `₹${payout.toLocaleString()}`;
+    document.getElementById('hero-est-book-btn').href = `/services.html?category=${category}`;
+  }
+
+  // Animated counter for stats
+  function animateCounter(el, target, suffix = '') {
+    let current = 0;
+    const step = target / 60;
+    const timer = setInterval(() => {
+      current += step;
+      if (current >= target) { current = target; clearInterval(timer); }
+      el.textContent = Math.floor(current).toLocaleString() + suffix;
+    }, 16);
+  }
+
+  const statsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        animateCounter(document.getElementById('stat-providers'), 2400, '+');
+        animateCounter(document.getElementById('stat-bookings'), 18000, '+');
+        animateCounter(document.getElementById('stat-cities'), 32, '');
+        document.getElementById('stat-rating').textContent = '4.8★';
+        statsObserver.disconnect();
+      }
+    });
+  }, { threshold: 0.5 });
+  const heroStats = document.querySelector('.hero-stats');
+  if (heroStats) statsObserver.observe(heroStats);
+</script>
+</body>
+</html>

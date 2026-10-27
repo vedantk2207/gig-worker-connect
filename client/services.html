@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Browse Services — GigCoop Cooperative Platform</title>
+  <meta name="description" content="Explore verified cooperative household services with fair pricing and worker-owner pride." />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .services-hero {
+      padding: 120px 0 40px;
+      background: var(--grad-hero);
+      text-align: center;
+    }
+    .search-filter-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 20px 24px;
+      margin-top: 32px;
+      box-shadow: var(--shadow-lg);
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr auto;
+      gap: 16px;
+      align-items: center;
+    }
+    .tools-banner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    .tool-card {
+      background: linear-gradient(135deg, rgba(37, 99, 235,0.1), rgba(20,184,166,0.06));
+      border: 1px solid rgba(37, 99, 235,0.25);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    .tool-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-glow);
+    }
+    @media (max-width: 900px) {
+      .search-filter-box { grid-template-columns: 1fr; }
+      .tools-banner { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <a href="/" class="logo">
+      <div class="logo-icon">🏘️</div>
+      <span class="brand">GigCoop</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/services.html" class="active">Services</a></li>
+      <li><a href="/group-booking.html">Group Booking</a></li>
+      <li><a href="/voting.html">Governance</a></li>
+      <li><a href="/subscriptions.html">Plans</a></li>
+      <li><a href="/equity.html">Worker Equity</a></li>
+      <li><a href="/referral.html">Refer & Earn</a></li>
+    </ul>
+    <div class="nav-actions">
+      <select class="lang-selector" id="lang-selector">
+        <option value="en">🇬🇧 English</option>
+        <option value="hi">🇮🇳 हिन्दी</option>
+      </select>
+      <a href="/login.html" class="btn btn-ghost btn-sm" id="nav-login">Login</a>
+      <a href="/register.html" class="btn btn-primary btn-sm" id="nav-register">Register</a>
+    </div>
+  </div>
+</nav>
+
+<!-- SERVICES HERO & SEARCH -->
+<section class="services-hero">
+  <div class="container">
+    <div class="section-tag">✨ 100% Worker-Owned & KYC-Verified</div>
+    <h1 style="font-size:clamp(2rem, 4vw, 3.2rem); margin-bottom:12px;">Find Trusted Local Home Services</h1>
+    <p style="color:var(--text-secondary); max-width:600px; margin:0 auto;">Fair rates benchmarked by community consensus. Every booking directly builds worker equity.</p>
+
+    <!-- Search & Filter Bar -->
+    <div class="search-filter-box">
+      <div style="position:relative;">
+        <input type="text" id="search-input" class="form-control" placeholder="🔍 Search cleaning, electrician, plumbing..." oninput="filterServices()" />
+      </div>
+      <select id="city-filter" class="form-control" onchange="filterServices()">
+        <option value="">🏙️ All Cities</option>
+        <option value="Mumbai">Mumbai</option>
+        <option value="Bangalore">Bangalore</option>
+        <option value="Delhi">Delhi NCR</option>
+        <option value="Hyderabad">Hyderabad</option>
+        <option value="Pune">Pune</option>
+      </select>
+      <select id="sort-filter" class="form-control" onchange="filterServices()">
+        <option value="rating">⭐ Highest Rated</option>
+        <option value="price_low">💰 Price: Low to High</option>
+        <option value="price_high">💎 Price: High to Low</option>
+        <option value="popular">🔥 Most Booked</option>
+      </select>
+      <button class="btn btn-primary" onclick="filterServices()">Filter</button>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN CONTENT -->
+<section class="section-sm">
+  <div class="container">
+    
+    <!-- AI Interactive Tools Banner -->
+    <div class="tools-banner">
+      <div class="tool-card" onclick="openAIMatchModal()">
+        <div>
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+            <span style="font-size:1.4rem;">🤖</span>
+            <h4 style="font-size:1.1rem;">AI Smart Job Matcher</h4>
+            <span class="badge badge-primary">Smart AI</span>
+          </div>
+          <p style="color:var(--text-secondary); font-size:0.85rem;">Let our algorithmic engine match top-rated cooperative providers based on your past preferences.</p>
+        </div>
+        <button class="btn btn-primary btn-sm" style="margin-left:16px;">Try Match</button>
+      </div>
+
+      <div class="tool-card" onclick="openPriceEstimatorModal()">
+        <div>
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+            <span style="font-size:1.4rem;">💡</span>
+            <h4 style="font-size:1.1rem;">AI Fair Price Calculator</h4>
+            <span class="badge badge-teal">Transparent</span>
+          </div>
+          <p style="color:var(--text-secondary); font-size:0.85rem;">Check transparent cost benchmarks per city and job complexity without surge exploitation.</p>
+        </div>
+        <button class="btn btn-outline btn-sm" style="margin-left:16px;">Calculate</button>
+      </div>
+    </div>
+
+    <!-- Category Chips -->
+    <div class="category-chips" id="category-chips">
+      <div class="chip active" data-cat="all" onclick="selectCategory('all', this)">✨ All Categories</div>
+      <div class="chip" data-cat="cleaning" onclick="selectCategory('cleaning', this)">🧹 Cleaning</div>
+      <div class="chip" data-cat="electrical" onclick="selectCategory('electrical', this)">⚡ Electrical</div>
+      <div class="chip" data-cat="plumbing" onclick="selectCategory('plumbing', this)">🚰 Plumbing</div>
+      <div class="chip" data-cat="tutoring" onclick="selectCategory('tutoring', this)">📚 Tutoring</div>
+      <div class="chip" data-cat="pest_control" onclick="selectCategory('pest_control', this)">🐜 Pest Control</div>
+      <div class="chip" data-cat="gardening" onclick="selectCategory('gardening', this)">🌱 Gardening</div>
+      <div class="chip" data-cat="carpentry" onclick="selectCategory('carpentry', this)">🪚 Carpentry</div>
+    </div>
+
+    <!-- Services Grid -->
+    <div class="services-grid" id="services-container">
+      <!-- Injected by JavaScript -->
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" id="empty-state" style="display:none;">
+      <div class="empty-state-icon">🔍</div>
+      <h3>No matching services found</h3>
+      <p>Try searching for different terms or reset your filters.</p>
+      <button class="btn btn-outline" onclick="resetFilters()">Reset All Filters</button>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================ BOOKING MODAL ============================================================ -->
+<div class="modal-overlay" id="booking-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <h3 id="modal-service-title">Book Service</h3>
+        <p style="color:var(--text-muted); font-size:0.85rem;" id="modal-service-cat">Cooperative Verified Provider</p>
+      </div>
+      <button class="modal-close" onclick="closeModal('booking-modal')">✕</button>
+    </div>
+
+    <form id="booking-form">
+      <input type="hidden" id="book-service-id" />
+
+      <div class="grid-2" style="gap:16px;">
+        <div class="form-group">
+          <label class="form-label">Preferred Date</label>
+          <input type="date" id="book-date" class="form-control" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Time Slot</label>
+          <select id="book-time" class="form-control">
+            <option value="09:00 AM">09:00 AM - 11:00 AM</option>
+            <option value="11:00 AM">11:00 AM - 01:00 PM</option>
+            <option value="02:00 PM">02:00 PM - 04:00 PM</option>
+            <option value="04:00 PM">04:00 PM - 06:00 PM</option>
+            <option value="06:00 PM">06:00 PM - 08:00 PM</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Service Address / Apartment</label>
+        <input type="text" id="book-address" class="form-control" placeholder="e.g. Flat 402, Green Meadows Residency" required />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Special Instructions or Notes</label>
+        <textarea id="book-notes" class="form-control" rows="2" placeholder="e.g. Bring extra ladder, pet in home, etc."></textarea>
+      </div>
+
+      <div style="background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-md); padding:16px; margin-bottom:20px;">
+        <div class="flex-between" style="font-size:0.9rem; margin-bottom:6px;">
+          <span style="color:var(--text-secondary);">Base Service Rate</span>
+          <span style="font-weight:700;" id="modal-price-base">₹1,299</span>
+        </div>
+        <div class="flex-between" style="font-size:0.82rem; color:var(--text-muted); margin-bottom:8px;">
+          <span>Platform Reinvestment (10%)</span>
+          <span id="modal-fee">₹130</span>
+        </div>
+        <div class="flex-between" style="font-size:0.82rem; color:var(--accent); margin-bottom:8px;">
+          <span>Worker Equity Points Awarded</span>
+          <span id="modal-equity-pts">+65 Points</span>
+        </div>
+        <div style="border-top:1px solid var(--border); padding-top:8px; display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-weight:700; font-size:1.05rem;">Total Payable</span>
+          <span style="font-family:var(--font-heading); font-size:1.3rem; font-weight:800; color:var(--accent);" id="modal-price-total">₹1,299</span>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;" id="btn-confirm-booking">
+        <span>Confirm & Dispatch Provider</span> 🚀
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- ============================================================ BOOKING CONFIRMATION RECEIPT MODAL ============================================================ -->
+<div class="modal-overlay" id="booking-success-modal">
+  <div class="modal" style="max-width:520px; text-align:center;">
+    <div style="width:68px; height:68px; background:rgba(16,185,129,0.15); border:2px solid var(--accent); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:2rem; margin:0 auto 16px; color:var(--accent);">
+      ✓
+    </div>
+    <div class="badge badge-success" style="margin-bottom:8px;">Booking Confirmed & Dispatched</div>
+    <h3 style="font-size:1.5rem; margin-bottom:6px;" id="receipt-title">Service Booked Successfully</h3>
+    <p style="color:var(--text-secondary); font-size:0.88rem; margin-bottom:20px;">
+      Order Ref: <strong style="color:var(--primary-light);" id="receipt-id">#BK-9042</strong> • Your verified worker-owner has accepted the assignment.
+    </p>
+
+    <div style="background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:20px; text-align:left; margin-bottom:24px;">
+      <div class="flex-between" style="margin-bottom:12px; border-bottom:1px solid var(--border); padding-bottom:12px;">
+        <div>
+          <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em;">Assigned Provider</span>
+          <div style="font-weight:700; font-size:1rem; display:flex; align-items:center; gap:8px; margin-top:2px;">
+            <span id="receipt-provider-name">Sunita Devi</span>
+            <span class="badge badge-teal" style="font-size:0.7rem;">⭐ 4.95</span>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em;">Time Slot</span>
+          <div style="font-weight:700; font-size:0.95rem; margin-top:2px;" id="receipt-datetime">Tomorrow, 10:00 AM</div>
+        </div>
+      </div>
+
+      <div class="flex-between" style="font-size:0.88rem; margin-bottom:8px;">
+        <span style="color:var(--text-secondary);">Service Address</span>
+        <span style="font-weight:600;" id="receipt-address">Flat 402, Green Meadows</span>
+      </div>
+
+      <div class="flex-between" style="font-size:0.88rem; margin-bottom:8px;">
+        <span style="color:var(--text-secondary);">Payment Method</span>
+        <span style="font-weight:600; color:var(--accent-light);">Cash / UPI on Completion</span>
+      </div>
+
+      <div class="flex-between" style="font-size:0.88rem; margin-bottom:12px;">
+        <span style="color:var(--text-secondary);">Worker Equity Awarded</span>
+        <span style="font-weight:700; color:var(--gold);" id="receipt-equity">+65 Points</span>
+      </div>
+
+      <div class="flex-between" style="border-top:1px solid var(--border); padding-top:12px;">
+        <span style="font-weight:700; font-size:1.05rem;">Total Payable</span>
+        <span style="font-family:var(--font-heading); font-size:1.4rem; font-weight:800; color:var(--accent);" id="receipt-amount">₹1,299</span>
+      </div>
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:10px;">
+      <a href="/dashboard-consumer.html" class="btn btn-primary" style="justify-content:center; padding:12px 20px;">
+        <span>View Live Tracking on Dashboard</span> 🚀
+      </a>
+      <button class="btn btn-ghost" onclick="closeModal('booking-success-modal')">
+        Book Another Service
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ AI MATCH MODAL ============================================================ -->
+<div class="modal-overlay" id="ai-match-modal">
+  <div class="modal" style="max-width:620px;">
+    <div class="modal-header">
+      <div>
+        <h3>🤖 AI Job Match Recommendations</h3>
+        <p style="color:var(--text-muted); font-size:0.85rem;">Multi-factor scoring: Reliability, Rating, Proximity & Equity</p>
+      </div>
+      <button class="modal-close" onclick="closeModal('ai-match-modal')">✕</button>
+    </div>
+
+    <div id="ai-match-list" style="display:flex; flex-direction:column; gap:12px;">
+      <!-- Populated dynamically -->
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ PRICE ESTIMATOR MODAL ============================================================ -->
+<div class="modal-overlay" id="price-modal">
+  <div class="modal" style="max-width:540px;">
+    <div class="modal-header">
+      <div>
+        <h3>💡 AI Fair Price Calculator</h3>
+        <p style="color:var(--text-muted); font-size:0.85rem;">Community benchmark rates vs corporate platform surge pricing</p>
+      </div>
+      <button class="modal-close" onclick="closeModal('price-modal')">✕</button>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Service Category</label>
+      <select id="calc-category" class="form-control" onchange="runPriceEstimate()">
+        <option value="cleaning">🧹 Home Deep Cleaning</option>
+        <option value="electrical">⚡ Electrical Repair</option>
+        <option value="plumbing">🚰 Plumbing & Leakage</option>
+        <option value="tutoring">📚 1-on-1 Tutoring</option>
+        <option value="pest_control">🐜 Pest Control</option>
+      </select>
+    </div>
+
+    <div class="grid-2" style="gap:16px;">
+      <div class="form-group">
+        <label class="form-label">City</label>
+        <select id="calc-city" class="form-control" onchange="runPriceEstimate()">
+          <option value="mumbai">Mumbai</option>
+          <option value="bangalore">Bangalore</option>
+          <option value="delhi">Delhi NCR</option>
+          <option value="hyderabad">Hyderabad</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Complexity</label>
+        <select id="calc-complexity" class="form-control" onchange="runPriceEstimate()">
+          <option value="low">Standard / Minor</option>
+          <option value="medium" selected>Moderate / Standard</option>
+          <option value="high">Heavy / Comprehensive</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="price-widget" style="margin-top:16px;">
+      <div style="text-align:center;">
+        <span style="font-size:0.85rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.06em;">Cooperative Fair Estimate</span>
+        <div style="font-family:var(--font-heading); font-size:2.8rem; font-weight:900; color:var(--accent);" id="calc-fair-price">₹850</div>
+        <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:4px;">Guaranteed fair compensation for workers without gouging customers.</p>
+      </div>
+      <div class="price-range-bar">
+        <div class="price-range-fill" id="calc-fill-bar" style="width:60%;"></div>
+      </div>
+      <div class="price-labels">
+        <div class="price-label-item">
+          <div class="price-label-value" id="calc-min-price">₹450</div>
+          <div class="price-label-text">Min Rate</div>
+        </div>
+        <div class="price-label-item">
+          <div class="price-label-value" style="color:var(--accent);" id="calc-fair-label">₹850</div>
+          <div class="price-label-text">Fair Benchmark</div>
+        </div>
+        <div class="price-label-item">
+          <div class="price-label-value" id="calc-max-price">₹1,800</div>
+          <div class="price-label-text">Cap Limit</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer" style="margin-top:80px;">
+  <div class="container">
+    <div class="footer-bottom" style="border:none; padding:0;">
+      <p>© 2026 GigCoop. Empowering worker-owned household services.</p>
+      <a href="/index.html" style="color:var(--primary-light);">Back to Home →</a>
+    </div>
+  </div>
+</footer>
+
+<div class="toast-container" id="toast-container"></div>
+
+<script src="js/mockData.js"></script>
+<script src="js/i18n.js"></script>
+<script>
+  let allServices = [];
+  let selectedCategory = 'all';
+
+  async function loadServices() {
+    try {
+      const res = await api('/services');
+      allServices = (res.data && res.data.length > 0) ? res.data : (window.MOCK_DATA?.services || []);
+    } catch {
+      allServices = window.MOCK_DATA?.services || [];
+    }
+
+    // Check category in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const cat = urlParams.get('category');
+    if (cat) {
+      selectedCategory = cat;
+      document.querySelectorAll('.chip').forEach(c => {
+        if (c.getAttribute('data-cat') === cat) c.classList.add('active');
+        else c.classList.remove('active');
+      });
+    }
+
+    renderServices(allServices);
+  }
+
+  function renderServices(services) {
+    const container = document.getElementById('services-container');
+    const emptyState = document.getElementById('empty-state');
+
+    if (!services || services.length === 0) {
+      container.innerHTML = '';
+      emptyState.style.display = 'block';
+      return;
+    }
+    emptyState.style.display = 'none';
+
+    container.innerHTML = services.map(s => {
+      const p = s.provider || { name: 'Verified Provider', averageRating: 4.9, equityPoints: 300 };
+      const img = s.images?.[0] || 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=800&q=80';
+      return `
+        <div class="service-card animate-fade-up">
+          <div class="service-card-img" style="background: url('${img}') center/cover no-repeat;">
+            <div class="service-card-badge">
+              <span class="badge badge-primary">🤝 Co-op Verified</span>
+            </div>
+          </div>
+          <div class="service-card-body">
+            <div class="flex-between" style="margin-bottom:6px;">
+              <span class="badge badge-teal" style="text-transform:capitalize;">${s.category}</span>
+              <div class="service-rating">★ ${s.averageRating || '4.9'} <span style="color:var(--text-muted); font-size:0.75rem;">(${s.totalBookings || 50}+)</span></div>
+            </div>
+            <h3 class="service-card-title">${s.title}</h3>
+            <div class="service-card-provider">
+              <img src="${p.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&q=80'}" class="avatar avatar-sm" alt="${p.name}" />
+              <span>${p.name} • <span style="color:var(--gold);">${p.equityPoints || 250} Equity pts</span></span>
+            </div>
+            <p style="font-size:0.83rem; color:var(--text-muted); margin-bottom:16px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">
+              ${s.description}
+            </p>
+            <div class="service-card-meta">
+              <div>
+                <span style="font-size:0.75rem; color:var(--text-muted);">Starting at</span>
+                <div class="service-price">₹${s.basePrice.toLocaleString()}</div>
+              </div>
+              <div style="display:flex; gap:8px;">
+                <a href="/service-detail.html?id=${s._id}" class="btn btn-ghost btn-sm">Details</a>
+                <button class="btn btn-primary btn-sm" onclick="openBookingModal('${s._id}')">Book</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function selectCategory(cat, el) {
+    selectedCategory = cat;
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    filterServices();
+  }
+
+  function filterServices() {
+    const search = (document.getElementById('search-input').value || '').toLowerCase();
+    const city = document.getElementById('city-filter').value;
+    const sort = document.getElementById('sort-filter').value;
+
+    let filtered = allServices.filter(s => {
+      const matchCat = (selectedCategory === 'all' || s.category === selectedCategory);
+      const matchSearch = (!search || s.title.toLowerCase().includes(search) || (s.description && s.description.toLowerCase().includes(search)) || s.category.includes(search));
+      const matchCity = (!city || (s.location && s.location.city.toLowerCase() === city.toLowerCase()));
+      return matchCat && matchSearch && matchCity;
+    });
+
+    if (sort === 'price_low') filtered.sort((a, b) => a.basePrice - b.basePrice);
+    else if (sort === 'price_high') filtered.sort((a, b) => b.basePrice - a.basePrice);
+    else if (sort === 'popular') filtered.sort((a, b) => (b.totalBookings || 0) - (a.totalBookings || 0));
+    else filtered.sort((a, b) => (b.averageRating || 0) - (a.averageRating || 0));
+
+    renderServices(filtered);
+  }
+
+  function resetFilters() {
+    document.getElementById('search-input').value = '';
+    document.getElementById('city-filter').value = '';
+    selectedCategory = 'all';
+    document.querySelectorAll('.chip').forEach((c, idx) => {
+      if (idx === 0) c.classList.add('active');
+      else c.classList.remove('active');
+    });
+    renderServices(allServices);
+  }
+
+  // Booking Modal
+  function openBookingModal(serviceId) {
+    const s = allServices.find(item => item._id === serviceId) || allServices[0];
+    if (!s) return;
+
+    document.getElementById('book-service-id').value = s._id;
+    document.getElementById('modal-service-title').textContent = s.title;
+    document.getElementById('modal-service-cat').textContent = `Category: ${s.category.toUpperCase()} • Provider: ${s.provider?.name || 'Verified'}`;
+    document.getElementById('modal-price-base').textContent = `₹${s.basePrice.toLocaleString()}`;
+    document.getElementById('modal-fee').textContent = `₹${Math.round(s.basePrice * 0.1).toLocaleString()}`;
+    document.getElementById('modal-equity-pts').textContent = `+${Math.floor(s.basePrice / 100) * 5} Points`;
+    document.getElementById('modal-price-total').textContent = `₹${s.basePrice.toLocaleString()}`;
+
+    // Set default tomorrow date
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    document.getElementById('book-date').value = tomorrow.toISOString().split('T')[0];
+
+    const user = Auth.getUser();
+    if (user && user.address?.street) {
+      document.getElementById('book-address').value = user.address.street;
+    }
+
+    openModal('booking-modal');
+  }
+
+  document.getElementById('booking-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const serviceId = document.getElementById('book-service-id').value;
+    const scheduledDate = document.getElementById('book-date').value;
+    const scheduledTime = document.getElementById('book-time').value;
+    const address = document.getElementById('book-address').value;
+    const notes = document.getElementById('book-notes').value;
+
+    const btn = document.getElementById('btn-confirm-booking');
+    btn.disabled = true;
+    btn.textContent = 'Processing Booking...';
+
+    const s = allServices.find(item => item._id === serviceId) || allServices[0] || {
+      _id: 'svc_1',
+      title: 'Home Deep Cleaning & Sanitization',
+      basePrice: 1299,
+      provider: { name: 'Sunita Devi' }
+    };
+
+    let bookedItem = null;
+    try {
+      const res = await api('/bookings', {
+        method: 'POST',
+        body: JSON.stringify({ serviceId: s._id, scheduledDate, scheduledTime, address: { street: address }, notes })
+      });
+      if (res && res.data) {
+        bookedItem = res.data;
+      }
+    } catch (err) {
+      console.warn('Backend booking error', err);
+    }
+
+    if (!bookedItem) {
+      // Local fallback guaranteed persistence
+      bookedItem = {
+        _id: 'BK-' + Math.floor(1000 + Math.random() * 9000),
+        service: s,
+        customer: Auth.getUser() || { name: 'Priya Sharma', phone: '+91 98765 43210' },
+        provider: s.provider || { name: 'Sunita Devi', avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&q=80', averageRating: 4.95 },
+        scheduledDate,
+        scheduledTime,
+        address: { street: address },
+        notes,
+        totalAmount: s.basePrice || 1299,
+        platformFee: Math.round((s.basePrice || 1299) * 0.1),
+        providerEarnings: Math.round((s.basePrice || 1299) * 0.9),
+        equityPointsAwarded: Math.floor((s.basePrice || 1299) / 100) * 5,
+        status: 'confirmed',
+        createdAt: new Date().toISOString()
+      };
+    }
+    BookingHelper.save(bookedItem);
+
+    btn.disabled = false;
+    btn.textContent = 'Confirm & Dispatch Provider 🚀';
+    closeModal('booking-modal');
+
+    // Populate Receipt Modal
+    const pName = bookedItem.provider?.name || s.provider?.name || 'Sunita Devi';
+    const sTitle = bookedItem.service?.title || s.title || 'Home Service';
+    const total = bookedItem.totalAmount || s.basePrice || 1299;
+    const orderId = (bookedItem._id && bookedItem._id.startsWith('BK-')) ? bookedItem._id : ('#BK-' + (bookedItem._id ? bookedItem._id.slice(-6).toUpperCase() : '9042'));
+
+    document.getElementById('receipt-title').textContent = sTitle;
+    document.getElementById('receipt-id').textContent = orderId;
+    document.getElementById('receipt-provider-name').textContent = pName;
+    document.getElementById('receipt-datetime').textContent = `${scheduledDate}, ${scheduledTime}`;
+    document.getElementById('receipt-address').textContent = address || 'Your Registered Apartment';
+    document.getElementById('receipt-amount').textContent = `₹${total.toLocaleString()}`;
+    document.getElementById('receipt-equity').textContent = `+${Math.floor(total / 100) * 5} Points`;
+
+    openModal('booking-success-modal');
+    showToast('🎉 Booking Confirmed! Worker-owner dispatched.', 'success');
+  });
+
+  // Modal helpers
+  function openModal(id) {
+    document.getElementById(id).classList.add('open');
+  }
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('open');
+  }
+
+  // AI Match Modal
+  function openAIMatchModal() {
+    const list = document.getElementById('ai-match-list');
+    const matched = allServices.slice(0, 3);
+
+    list.innerHTML = matched.map((s, idx) => {
+      const score = 98 - (idx * 4);
+      return `
+        <div style="background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-md); padding:16px; display:flex; align-items:center; justify-content:space-between; gap:16px;">
+          <div style="display:flex; align-items:center; gap:14px;">
+            <div class="match-score-ring">
+              <span class="match-score-value">${score}%</span>
+            </div>
+            <div>
+              <div style="font-weight:700; font-size:0.95rem; margin-bottom:2px;">${s.title}</div>
+              <div style="font-size:0.8rem; color:var(--text-muted);">${s.provider?.name} • ${s.averageRating}★ (${s.totalBookings}+ jobs)</div>
+              <div style="font-size:0.75rem; color:var(--accent); margin-top:4px;">✓ High customer retention • Zero cancellations</div>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="closeModal('ai-match-modal'); openBookingModal('${s._id}')">Select</button>
+        </div>
+      `;
+    }).join('');
+
+    openModal('ai-match-modal');
+  }
+
+  // Price Estimator Modal
+  function openPriceEstimatorModal() {
+    runPriceEstimate();
+    openModal('price-modal');
+  }
+
+  async function runPriceEstimate() {
+    const cat = document.getElementById('calc-category').value;
+    const city = document.getElementById('calc-city').value;
+    const comp = document.getElementById('calc-complexity').value;
+
+    const baseRates = {
+      cleaning: { min: 450, fair: 950, max: 1800 },
+      electrical: { min: 350, fair: 650, max: 1500 },
+      plumbing: { min: 400, fair: 750, max: 1600 },
+      tutoring: { min: 500, fair: 800, max: 2000 },
+      pest_control: { min: 600, fair: 1100, max: 2500 }
+    };
+
+    const rate = baseRates[cat] || { min: 400, fair: 800, max: 1800 };
+    const mult = comp === 'high' ? 1.3 : (comp === 'low' ? 0.8 : 1.0);
+    const fair = Math.round(rate.fair * mult);
+
+    document.getElementById('calc-fair-price').textContent = `₹${fair.toLocaleString()}`;
+    document.getElementById('calc-min-price').textContent = `₹${Math.round(rate.min * mult).toLocaleString()}`;
+    document.getElementById('calc-fair-label').textContent = `₹${fair.toLocaleString()}`;
+    document.getElementById('calc-max-price').textContent = `₹${Math.round(rate.max * mult).toLocaleString()}`;
+  }
+
+  document.addEventListener('DOMContentLoaded', loadServices);
+</script>
+</body>
+</html>

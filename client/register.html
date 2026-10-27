@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register — Join GigCoop Cooperative</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .auth-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 100px 20px 40px;
+      background: var(--grad-hero);
+      position: relative;
+    }
+    .auth-card {
+      width: 100%;
+      max-width: 560px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 40px;
+      box-shadow: var(--shadow-lg), var(--shadow-glow);
+      position: relative;
+      z-index: 2;
+    }
+    .role-tabs {
+      display: flex;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 4px;
+      margin-bottom: 24px;
+      gap: 4px;
+    }
+    .role-tab {
+      flex: 1;
+      padding: 12px;
+      text-align: center;
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .role-tab.active {
+      background: var(--grad-primary);
+      color: #fff;
+      box-shadow: var(--shadow-sm);
+    }
+    .perk-box {
+      background: rgba(20,184,166,0.1);
+      border: 1px solid rgba(20,184,166,0.25);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      font-size: 0.85rem;
+      color: var(--accent-light);
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <a href="/" class="logo">
+      <div class="logo-icon">🏘️</div>
+      <span class="brand">GigCoop</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/services.html">Services</a></li>
+      <li><a href="/group-booking.html">Group Booking</a></li>
+      <li><a href="/voting.html">Governance</a></li>
+      <li><a href="/subscriptions.html">Plans</a></li>
+    </ul>
+    <div class="nav-actions">
+      <select class="lang-selector" id="lang-selector">
+        <option value="en">🇬🇧 English</option>
+        <option value="hi">🇮🇳 हिन्दी</option>
+      </select>
+      <a href="/login.html" class="btn btn-ghost btn-sm">Login</a>
+    </div>
+  </div>
+</nav>
+
+<div class="auth-page">
+  <div class="hero-blob hero-blob-1"></div>
+  <div class="hero-blob hero-blob-2"></div>
+
+  <div class="auth-card">
+    <div style="text-align:center; margin-bottom:24px;">
+      <div class="logo-icon" style="margin:0 auto 12px; width:48px; height:48px; font-size:1.5rem;">🤝</div>
+      <h2 style="font-size:1.8rem; margin-bottom:6px;">Join the Cooperative</h2>
+      <p style="color:var(--text-secondary); font-size:0.9rem;">Fair wages, zero exploitation, community-owned services</p>
+    </div>
+
+    <!-- Role Switch Tabs -->
+    <div class="role-tabs">
+      <div class="role-tab active" id="tab-customer" onclick="selectRole('customer')">
+        👤 Resident / Customer
+      </div>
+      <div class="role-tab" id="tab-provider" onclick="selectRole('provider')">
+        💼 Worker-Owner Provider
+      </div>
+    </div>
+
+    <div class="perk-box" id="role-perk-box">
+      🎉 <strong>Resident Bonus:</strong> Get ₹50 welcome wallet credit towards your first verified household service!
+    </div>
+
+    <form id="register-form">
+      <input type="hidden" id="role" value="customer" />
+
+      <div class="grid-2" style="gap:16px;">
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input type="text" id="name" class="form-control" placeholder="e.g. Kavita Sharma" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Phone Number</label>
+          <input type="tel" id="phone" class="form-control" placeholder="+91 98765 43210" required />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" id="email" class="form-control" placeholder="you@example.com" required />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" id="password" class="form-control" placeholder="Create a strong password" required />
+      </div>
+
+      <div class="grid-2" style="gap:16px;">
+        <div class="form-group">
+          <label class="form-label">Society / Neighborhood</label>
+          <input type="text" id="societyName" class="form-control" placeholder="e.g. Palm Meadows" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Referral Code (Optional)</label>
+          <input type="text" id="referralCode" class="form-control" placeholder="e.g. PRIYA88" />
+        </div>
+      </div>
+
+      <!-- Provider-Only Fields -->
+      <div id="provider-fields" style="display:none; border-top:1px dashed var(--border); padding-top:16px; margin-top:10px;">
+        <div class="form-group">
+          <label class="form-label">Primary Primary Service Skills</label>
+          <select id="skills" class="form-control">
+            <option value="cleaning">🧹 Deep Cleaning & Sanitization</option>
+            <option value="electrical">⚡ Electrical & Appliance Repair</option>
+            <option value="plumbing">🚰 Plumbing & Water Systems</option>
+            <option value="tutoring">📚 STEM & Language Tutoring</option>
+            <option value="carpentry">🪚 Carpentry & Furniture Repair</option>
+            <option value="gardening">🌱 Plant & Balcony Gardening</option>
+            <option value="pest_control">🐜 Herbal Pest Control</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Years of Professional Experience</label>
+          <input type="number" id="experience" class="form-control" placeholder="e.g. 5" min="1" max="40" />
+        </div>
+        <div style="background:rgba(37, 99, 235,0.1); border:1px solid rgba(37, 99, 235,0.25); border-radius:var(--radius-md); padding:12px; margin-bottom:16px; font-size:0.82rem; color:var(--text-secondary);">
+          ⭐ <strong>Worker-Owner Equity Pledge:</strong> As a provider on GigCoop, you earn ownership equity points for every completed job, receiving voting power and annual profit share dividends!
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; margin-top:14px;" id="btn-submit">
+        <span>Complete Registration</span> →
+      </button>
+    </form>
+
+    <div style="text-align:center; margin-top:24px; padding-top:20px; border-top:1px solid var(--border); font-size:0.88rem; color:var(--text-secondary);">
+      Already a cooperative member? <a href="/login.html" style="color:var(--primary-light); font-weight:600;">Sign In Here</a>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toast-container"></div>
+
+<script src="js/mockData.js"></script>
+<script src="js/i18n.js"></script>
+<script>
+  function selectRole(role) {
+    document.getElementById('role').value = role;
+    const tabCustomer = document.getElementById('tab-customer');
+    const tabProvider = document.getElementById('tab-provider');
+    const providerFields = document.getElementById('provider-fields');
+    const perkBox = document.getElementById('role-perk-box');
+
+    if (role === 'provider') {
+      tabProvider.classList.add('active');
+      tabCustomer.classList.remove('active');
+      providerFields.style.display = 'block';
+      perkBox.innerHTML = '🛡️ <strong>Worker-Owner Perks:</strong> Keep 90-92% of earnings, get free accident insurance, and earn equity shares in platform surplus!';
+    } else {
+      tabCustomer.classList.add('active');
+      tabProvider.classList.remove('active');
+      providerFields.style.display = 'none';
+      perkBox.innerHTML = '🎉 <strong>Resident Bonus:</strong> Get ₹50 welcome wallet credit towards your first verified household service!';
+    }
+  }
+
+  // Preselect role from URL if present
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('role') === 'provider') {
+    selectRole('provider');
+  }
+
+  document.getElementById('register-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const role = document.getElementById('role').value;
+    const name = document.getElementById('name').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const societyName = document.getElementById('societyName').value.trim();
+    const referralCode = document.getElementById('referralCode').value.trim();
+
+    const newUser = {
+      id: 'usr_' + Date.now(),
+      name, phone, email, role,
+      societyName: societyName || 'Community Member',
+      walletBalance: role === 'customer' ? 50 : 0,
+      equityPoints: role === 'provider' ? 50 : 0,
+      referralCode: name.slice(0, 4).toUpperCase() + Math.floor(Math.random() * 100)
+    };
+
+    try {
+      const res = await api('/auth/register', {
+        method: 'POST',
+        body: JSON.stringify({ name, phone, email, password, role, societyName, referralCode })
+      });
+      if (res.success) {
+        Auth.setAuth(res.token, res.user);
+      } else {
+        Auth.setAuth('mock_token_' + role, newUser);
+      }
+    } catch {
+      Auth.setAuth('mock_token_' + role, newUser);
+    }
+
+    showToast(`Welcome to GigCoop, ${name}!`, 'success');
+    setTimeout(() => {
+      window.location.href = `/dashboard-${role}.html`;
+    }, 600);
+  });
+</script>
+</body>
+</html>

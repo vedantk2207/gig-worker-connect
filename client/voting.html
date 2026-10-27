@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cooperative Governance & Voting — GigCoop</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .voting-hero {
+      padding: 120px 0 50px;
+      background: var(--grad-hero);
+      text-align: center;
+    }
+    .proposal-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      margin-bottom: 24px;
+      transition: var(--transition);
+    }
+    .proposal-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
+    }
+    .vote-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .vote-btn {
+      flex: 1;
+      padding: 10px 16px;
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      background: var(--bg-glass);
+      color: var(--text-secondary);
+      transition: var(--transition);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .vote-btn:hover {
+      transform: translateY(-2px);
+    }
+    .vote-btn.btn-yes:hover, .vote-btn.selected-yes {
+      background: rgba(16,185,129,0.15);
+      border-color: var(--success);
+      color: #34d399;
+    }
+    .vote-btn.btn-no:hover, .vote-btn.selected-no {
+      background: rgba(239,68,68,0.15);
+      border-color: var(--danger);
+      color: #f87171;
+    }
+    .vote-btn.btn-abs:hover, .vote-btn.selected-abs {
+      background: rgba(245,158,11,0.15);
+      border-color: var(--warning);
+      color: var(--gold);
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <a href="/" class="logo">
+      <div class="logo-icon">🏘️</div>
+      <span class="brand">GigCoop</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/services.html">Services</a></li>
+      <li><a href="/group-booking.html">Group Booking</a></li>
+      <li><a href="/voting.html" class="active">Governance</a></li>
+      <li><a href="/subscriptions.html">Plans</a></li>
+      <li><a href="/equity.html">Worker Equity</a></li>
+      <li><a href="/referral.html">Refer & Earn</a></li>
+    </ul>
+    <div class="nav-actions">
+      <select class="lang-selector" id="lang-selector">
+        <option value="en">🇬🇧 English</option>
+        <option value="hi">🇮🇳 हिन्दी</option>
+      </select>
+      <a href="/login.html" class="btn btn-ghost btn-sm" id="nav-login">Login</a>
+      <button class="btn btn-primary btn-sm" onclick="openSubmitModal()">+ New Proposal</button>
+    </div>
+  </div>
+</nav>
+
+<section class="voting-hero">
+  <div class="container">
+    <div class="section-tag">🗳️ Democratic Platform Ownership</div>
+    <h1 style="font-size:clamp(2rem, 4vw, 3.2rem); margin-bottom:12px;">Worker-Owned Governance & Community Voting</h1>
+    <p style="color:var(--text-secondary); max-width:640px; margin:0 auto;">
+      At GigCoop, decisions on platform commission rates, worker welfare funds, safety standards, and dividend distributions are decided by collective democratic vote.
+    </p>
+
+    <div style="display:flex; justify-content:center; gap:24px; margin-top:32px; flex-wrap:wrap;">
+      <div class="glass-card" style="padding:14px 24px; display:flex; align-items:center; gap:10px;">
+        <span style="font-size:1.4rem;">👥</span>
+        <div style="text-align:left;">
+          <div style="font-weight:700; font-size:1rem;" id="stat-total-votes">6,902 Votes Cast</div>
+          <div style="font-size:0.75rem; color:var(--text-muted);">Active Cooperative Electorate</div>
+        </div>
+      </div>
+      <div class="glass-card" style="padding:14px 24px; display:flex; align-items:center; gap:10px;">
+        <span style="font-size:1.4rem;">⚖️</span>
+        <div style="text-align:left;">
+          <div style="font-weight:700; font-size:1rem;">Equity Weighted</div>
+          <div style="font-size:0.75rem; color:var(--text-muted);">100 Equity Pts = 1 Multiplier</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-sm">
+  <div class="container" style="max-width:900px;">
+    <div class="flex-between" style="margin-bottom:28px;">
+      <div>
+        <h2>Active Cooperative Ballots</h2>
+        <p style="color:var(--text-secondary); font-size:0.9rem;">Cast your ballot before the deadline expires</p>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="openSubmitModal()">✍️ Submit Resolution</button>
+    </div>
+
+    <!-- Proposals List Container -->
+    <div id="proposals-container">
+      <!-- Populated by JavaScript -->
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ SUBMIT PROPOSAL MODAL ============================================================ -->
+<div class="modal-overlay" id="proposal-modal">
+  <div class="modal" style="max-width:540px;">
+    <div class="modal-header">
+      <div>
+        <h3>✍️ Submit Governance Resolution</h3>
+        <p style="color:var(--text-muted); font-size:0.85rem;">Propose a policy change or fund allocation to the board</p>
+      </div>
+      <button class="modal-close" onclick="closeModal('proposal-modal')">✕</button>
+    </div>
+
+    <form id="proposal-form">
+      <div class="form-group">
+        <label class="form-label">Resolution Title</label>
+        <input type="text" id="prop-title" class="form-control" placeholder="e.g. Expand tool subsidies for electricians" required />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Category</label>
+        <select id="prop-category" class="form-control">
+          <option value="welfare">🏥 Worker Welfare & Health Fund</option>
+          <option value="platform_fee">💰 Platform Commission & Fees</option>
+          <option value="new_feature">🛠️ Tool Grants & Training</option>
+          <option value="community">🏘️ Society Discounts & Expansion</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Detailed Rationale & Implementation Plan</label>
+        <textarea id="prop-desc" class="form-control" rows="4" placeholder="Explain why this benefits workers and customers..." required></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">
+        <span>Publish Proposal to Electorate</span> 🗳️
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer" style="margin-top:80px;">
+  <div class="container">
+    <div class="footer-bottom" style="border:none; padding:0;">
+      <p>© 2026 GigCoop. Cooperative democratic governance.</p>
+      <a href="/equity.html" style="color:var(--primary-light);">View Worker Equity Ledger →</a>
+    </div>
+  </div>
+</footer>
+
+<div class="toast-container" id="toast-container"></div>
+
+<script src="js/mockData.js"></script>
+<script src="js/i18n.js"></script>
+<script>
+  let proposals = [];
+
+  async function loadProposals() {
+    try {
+      const res = await api('/voting');
+      proposals = (res.data && res.data.length > 0) ? res.data : (window.MOCK_DATA?.votingProposals || []);
+    } catch {
+      proposals = window.MOCK_DATA?.votingProposals || [];
+    }
+    renderProposals();
+  }
+
+  function renderProposals() {
+    const container = document.getElementById('proposals-container');
+    if (!proposals || proposals.length === 0) {
+      container.innerHTML = '<div class="card" style="text-align:center; padding:40px;"><h3>No active ballots</h3></div>';
+      return;
+    }
+
+    container.innerHTML = proposals.map(p => {
+      const yes = p.yesCount || 0;
+      const no = p.noCount || 0;
+      const total = (yes + no) || 1;
+      const yesPercent = Math.round((yes / total) * 100);
+      const noPercent = 100 - yesPercent;
+
+      return `
+        <div class="proposal-card animate-fade-up">
+          <div class="flex-between" style="margin-bottom:12px;">
+            <span class="badge badge-primary" style="text-transform:uppercase;">🏷️ ${p.category || 'General'}</span>
+            <span class="badge badge-teal">⏱️ Ends ${p.endsAt ? p.endsAt.split('T')[0] : 'in 5 days'}</span>
+          </div>
+
+          <h3 style="margin-bottom:10px; font-size:1.25rem;">${p.title}</h3>
+          <p style="color:var(--text-secondary); font-size:0.92rem; line-height:1.7; margin-bottom:20px;">
+            ${p.description}
+          </p>
+
+          <!-- Vote Bar -->
+          <div style="margin-bottom:10px;">
+            <div class="flex-between" style="font-size:0.85rem; font-weight:600; margin-bottom:6px;">
+              <span style="color:var(--success);">Yes: ${yes.toLocaleString()} (${yesPercent}%)</span>
+              <span style="color:var(--danger);">No: ${no.toLocaleString()} (${noPercent}%)</span>
+            </div>
+            <div class="vote-bar">
+              <div class="vote-bar-fill vote-yes" style="width: ${yesPercent}%;"></div>
+            </div>
+          </div>
+
+          <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:16px;">
+            Proposed by: <strong>${p.author?.name || 'Cooperative Guild Member'}</strong> (${p.author?.role?.toUpperCase() || 'MEMBER'})
+          </div>
+
+          <!-- Interactive Vote Actions -->
+          <div class="vote-actions">
+            <button class="vote-btn btn-yes ${p.userVote === 'yes' ? 'selected-yes' : ''}" onclick="castVote('${p._id}', 'yes')">
+              👍 Vote YES
+            </button>
+            <button class="vote-btn btn-no ${p.userVote === 'no' ? 'selected-no' : ''}" onclick="castVote('${p._id}', 'no')">
+              👎 Vote NO
+            </button>
+            <button class="vote-btn btn-abs ${p.userVote === 'abstain' ? 'selected-abs' : ''}" onclick="castVote('${p._id}', 'abstain')">
+              ✋ Abstain
+            </button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function castVote(propId, choice) {
+    const user = Auth.getUser();
+    const weight = user?.role === 'provider' ? 4 : 1;
+
+    const p = proposals.find(item => item._id === propId);
+    if (p) {
+      if (p.userVote) {
+        showToast('You have already cast your ballot for this resolution.', 'warning');
+        return;
+      }
+      p.userVote = choice;
+      if (choice === 'yes') p.yesCount = (p.yesCount || 0) + (10 * weight);
+      if (choice === 'no') p.noCount = (p.noCount || 0) + (10 * weight);
+      p.totalVotes = (p.totalVotes || 0) + (10 * weight);
+      renderProposals();
+      showToast(`🗳️ Ballot recorded! Choice: ${choice.toUpperCase()} (${weight}x multiplier applied)`, 'success');
+    }
+  }
+
+  function openSubmitModal() { openModal('proposal-modal'); }
+
+  document.getElementById('proposal-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const title = document.getElementById('prop-title').value;
+    const category = document.getElementById('prop-category').value;
+    const description = document.getElementById('prop-desc').value;
+
+    const newProp = {
+      _id: 'prop_' + Date.now(),
+      title,
+      category,
+      description,
+      status: 'active',
+      author: Auth.getUser() || { name: 'Priya Sharma', role: 'customer' },
+      yesCount: 1,
+      noCount: 0,
+      totalVotes: 1,
+      endsAt: '2026-09-25'
+    };
+
+    proposals.unshift(newProp);
+    renderProposals();
+    closeModal('proposal-modal');
+    showToast('🎉 Resolution submitted! It is now live for community voting.', 'success');
+  });
+
+  function openModal(id) { document.getElementById(id).classList.add('open'); }
+  function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+  document.addEventListener('DOMContentLoaded', loadProposals);
+</script>
+</body>
+</html>

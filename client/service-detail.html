@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Service Details — GigCoop</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 36px;
+      padding: 110px 0 60px;
+    }
+    .detail-hero-img {
+      width: 100%;
+      height: 380px;
+      border-radius: var(--radius-xl);
+      object-fit: cover;
+      border: 1px solid var(--border);
+      margin-bottom: 28px;
+    }
+    .booking-sidebar {
+      position: sticky;
+      top: 90px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 28px;
+      box-shadow: var(--shadow-md);
+      height: fit-content;
+    }
+    .review-item {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+    @media (max-width: 900px) {
+      .detail-grid { grid-template-columns: 1fr; }
+      .booking-sidebar { position: static; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <a href="/" class="logo">
+      <div class="logo-icon">🏘️</div>
+      <span class="brand">GigCoop</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/services.html">Services</a></li>
+      <li><a href="/group-booking.html">Group Booking</a></li>
+      <li><a href="/voting.html">Governance</a></li>
+      <li><a href="/subscriptions.html">Plans</a></li>
+    </ul>
+    <div class="nav-actions">
+      <select class="lang-selector" id="lang-selector">
+        <option value="en">🇬🇧 English</option>
+        <option value="hi">🇮🇳 हिन्दी</option>
+      </select>
+      <a href="/login.html" class="btn btn-ghost btn-sm" id="nav-login">Login</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="detail-grid">
+    <!-- Left Column: Details -->
+    <div>
+      <img id="detail-img" src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=1200&q=80" class="detail-hero-img" alt="Service banner" />
+
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+        <span class="badge badge-primary" id="detail-cat">Cleaning</span>
+        <span class="badge badge-success">✓ 100% Worker Owned</span>
+        <span class="badge badge-teal" id="detail-duration">⏱️ 4 Hours</span>
+      </div>
+
+      <h1 id="detail-title" style="font-size:clamp(1.8rem, 3.5vw, 2.6rem); margin-bottom:16px;">Full Home Deep Cleaning & Sanitization</h1>
+
+      <!-- Provider Profile Card -->
+      <div class="card" style="margin-bottom:28px; background:var(--bg-surface); padding:20px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px;">
+          <div style="display:flex; align-items:center; gap:16px;">
+            <img id="provider-avatar" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&q=80" class="avatar avatar-md" alt="Provider" />
+            <div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <h4 id="provider-name" style="font-size:1.1rem; margin-bottom:2px;">Sunita Devi</h4>
+                <span class="badge badge-primary">★ Certified Co-op Member</span>
+              </div>
+              <div style="font-size:0.85rem; color:var(--text-muted);">
+                <span id="provider-rating">4.95★ (126 reviews)</span> • <span style="color:var(--gold);" id="provider-equity">650 Equity Points</span>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-outline btn-sm" onclick="showToast('Connecting you to provider via real-time chat...', 'info');">💬 Chat with Provider</button>
+        </div>
+        <p id="provider-bio" style="font-size:0.88rem; color:var(--text-secondary); margin-top:14px; line-height:1.6;">
+          Cooperative Hygiene Team Lead. Trained in eco-friendly hospital-grade sanitization.
+        </p>
+      </div>
+
+      <!-- Description & Features -->
+      <div style="margin-bottom:36px;">
+        <h3 style="margin-bottom:12px;">Service Overview</h3>
+        <p id="detail-desc" style="color:var(--text-secondary); line-height:1.8; margin-bottom:20px;">
+          Comprehensive 4-hour deep cleaning using hospital-grade eco friendly materials. Covers bathrooms, kitchen degreasing, floor scrubbing, balcony, and glass windows.
+        </p>
+
+        <h3 style="margin-bottom:14px;">What's Included</h3>
+        <div id="detail-features" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:12px;">
+          <div class="badge badge-teal" style="padding:10px 14px; font-size:0.85rem;">✓ Eco-friendly cleaning agents</div>
+          <div class="badge badge-teal" style="padding:10px 14px; font-size:0.85rem;">✓ Equipment included</div>
+          <div class="badge badge-teal" style="padding:10px 14px; font-size:0.85rem;">✓ Full sanitization</div>
+          <div class="badge badge-teal" style="padding:10px 14px; font-size:0.85rem;">✓ Verified worker-owner team</div>
+        </div>
+      </div>
+
+      <!-- Reviews Section -->
+      <div>
+        <div class="flex-between" style="margin-bottom:20px;">
+          <h3>Verified Resident Reviews (4.95★)</h3>
+          <button class="btn btn-ghost btn-sm" onclick="showToast('You can review this service after completion in your dashboard.', 'info')">Write Review</button>
+        </div>
+
+        <div class="review-item">
+          <div class="flex-between" style="margin-bottom:8px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <div class="avatar-placeholder" style="width:32px; height:32px; font-size:0.8rem;">PS</div>
+              <div>
+                <strong style="font-size:0.9rem;">Priya Sharma</strong>
+                <div style="font-size:0.75rem; color:var(--text-muted);">Green Meadows Residency • 3 days ago</div>
+              </div>
+            </div>
+            <div style="color:var(--gold);">★★★★★</div>
+          </div>
+          <p style="color:var(--text-secondary); font-size:0.88rem; line-height:1.6;">
+            "Sunita and her co-op partner did an absolutely stellar job! Our kitchen tiles look brand new. Knowing they keep 90% of the pay makes it feel so rewarding to hire."
+          </p>
+        </div>
+
+        <div class="review-item">
+          <div class="flex-between" style="margin-bottom:8px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <div class="avatar-placeholder" style="width:32px; height:32px; font-size:0.8rem;">RV</div>
+              <div>
+                <strong style="font-size:0.9rem;">Rahul Verma</strong>
+                <div style="font-size:0.75rem; color:var(--text-muted);">Palm Springs Apartments • 1 week ago</div>
+              </div>
+            </div>
+            <div style="color:var(--gold);">★★★★★</div>
+          </div>
+          <p style="color:var(--text-secondary); font-size:0.88rem; line-height:1.6;">
+            "Extremely punctual, polite and thorough with cleaning. Highly recommended to all our society neighbors."
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right Column: Instant Booking Card -->
+    <div>
+      <div class="booking-sidebar">
+        <div style="margin-bottom:20px;">
+          <span style="font-size:0.85rem; color:var(--text-muted);">Cooperative Fair Rate</span>
+          <div style="font-family:var(--font-heading); font-size:2.4rem; font-weight:900; color:var(--accent);" id="sidebar-price">₹1,299</div>
+        </div>
+
+        <form id="sidebar-book-form">
+          <div class="form-group">
+            <label class="form-label">Service Date</label>
+            <input type="date" id="side-date" class="form-control" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Time Slot</label>
+            <select id="side-time" class="form-control">
+              <option>09:00 AM - 11:00 AM</option>
+              <option>11:00 AM - 01:00 PM</option>
+              <option>02:00 PM - 04:00 PM</option>
+              <option>04:00 PM - 06:00 PM</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Apartment / Address</label>
+            <input type="text" id="side-address" class="form-control" placeholder="e.g. Flat 402, B Wing" required />
+          </div>
+
+          <div style="background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-md); padding:14px; margin-bottom:20px; font-size:0.85rem;">
+            <div class="flex-between" style="margin-bottom:6px;">
+              <span style="color:var(--text-secondary);">Worker Direct Payout (90%)</span>
+              <span id="side-worker-payout">₹1,169</span>
+            </div>
+            <div class="flex-between" style="color:var(--text-muted); margin-bottom:6px;">
+              <span>Co-op Operations (10%)</span>
+              <span id="side-fee">₹130</span>
+            </div>
+            <div class="flex-between" style="color:var(--gold);">
+              <span>Worker Equity Points</span>
+              <span>+65 pts</span>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">
+            <span>Instant Book Now</span> ⚡
+          </button>
+        </form>
+
+        <div style="text-align:center; margin-top:16px;">
+          <a href="/group-booking.html" style="font-size:0.85rem; color:var(--primary-light);">
+            🏘️ Book with Neighbors for 15-30% off →
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============================================================ BOOKING CONFIRMATION RECEIPT MODAL ============================================================ -->
+<div class="modal-overlay" id="booking-success-modal">
+  <div class="modal" style="max-width:520px; text-align:center;">
+    <div style="width:68px; height:68px; background:rgba(16,185,129,0.15); border:2px solid var(--accent); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:2rem; margin:0 auto 16px; color:var(--accent);">
+      ✓
+    </div>
+    <div class="badge badge-success" style="margin-bottom:8px;">Booking Confirmed & Dispatched</div>
+    <h3 style="font-size:1.5rem; margin-bottom:6px;" id="receipt-title">Service Booked Successfully</h3>
+    <p style="color:var(--text-secondary); font-size:0.88rem; margin-bottom:20px;">
+      Order Ref: <strong style="color:var(--primary-light);" id="receipt-id">#BK-9042</strong> • Your verified worker-owner has accepted the assignment.
+    </p>
+
+    <div style="background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:20px; text-align:left; margin-bottom:24px;">
+      <div class="flex-between" style="margin-bottom:12px; border-bottom:1px solid var(--border); padding-bottom:12px;">
+        <div>
+          <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em;">Assigned Provider</span>
+          <div style="font-weight:700; font-size:1rem; display:flex; align-items:center; gap:8px; margin-top:2px;">
+            <span id="receipt-provider-name">Sunita Devi</span>
+            <span class="badge badge-teal" style="font-size:0.7rem;">⭐ 4.95</span>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em;">Time Slot</span>
+          <div style="font-weight:700; font-size:0.95rem; margin-top:2px;" id="receipt-datetime">Tomorrow, 10:00 AM</div>
+        </div>
+      </div>
+
+      <div class="flex-between" style="font-size:0.88rem; margin-bottom:8px;">
+        <span style="color:var(--text-secondary);">Service Address</span>
+        <span style="font-weight:600;" id="receipt-address">Flat 402, Green Meadows</span>
+      </div>
+
+      <div class="flex-between" style="font-size:0.88rem; margin-bottom:8px;">
+        <span style="color:var(--text-secondary);">Payment Method</span>
+        <span style="font-weight:600; color:var(--accent-light);">Cash / UPI on Completion</span>
+      </div>
+
+      <div class="flex-between" style="font-size:0.88rem; margin-bottom:12px;">
+        <span style="color:var(--text-secondary);">Worker Equity Awarded</span>
+        <span style="font-weight:700; color:var(--gold);" id="receipt-equity">+65 Points</span>
+      </div>
+
+      <div class="flex-between" style="border-top:1px solid var(--border); padding-top:12px;">
+        <span style="font-weight:700; font-size:1.05rem;">Total Payable</span>
+        <span style="font-family:var(--font-heading); font-size:1.4rem; font-weight:800; color:var(--accent);" id="receipt-amount">₹1,299</span>
+      </div>
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:10px;">
+      <a href="/dashboard-consumer.html" class="btn btn-primary" style="justify-content:center; padding:12px 20px;">
+        <span>View Live Tracking on Dashboard</span> 🚀
+      </a>
+      <a href="/services.html" class="btn btn-ghost" style="text-align:center;">
+        Browse More Services
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toast-container"></div>
+
+<script src="js/mockData.js"></script>
+<script src="js/i18n.js"></script>
+<script>
+  let currentService = null;
+
+  async function loadDetail() {
+    const params = new URLSearchParams(window.location.search);
+    const serviceId = params.get('id');
+
+    try {
+      if (serviceId) {
+        const res = await api('/services/' + serviceId);
+        if (res && res.data) {
+          currentService = res.data;
+        }
+      }
+    } catch (err) {
+      console.warn('API load service error', err);
+    }
+
+    if (!currentService) {
+      const all = window.MOCK_DATA?.services || [];
+      currentService = all.find(s => s._id === serviceId) || all[0];
+    }
+
+    if (currentService) {
+      document.getElementById('detail-title').textContent = currentService.title;
+      document.getElementById('detail-desc').textContent = currentService.description;
+      document.getElementById('detail-cat').textContent = (currentService.category || 'HOME').toUpperCase();
+      document.getElementById('sidebar-price').textContent = `₹${(currentService.basePrice || 1299).toLocaleString()}`;
+      document.getElementById('side-worker-payout').textContent = `₹${Math.round((currentService.basePrice || 1299) * 0.9).toLocaleString()}`;
+      document.getElementById('side-fee').textContent = `₹${Math.round((currentService.basePrice || 1299) * 0.1).toLocaleString()}`;
+
+      if (currentService.images?.[0]) {
+        document.getElementById('detail-img').src = currentService.images[0];
+      }
+
+      if (currentService.provider) {
+        document.getElementById('provider-name').textContent = currentService.provider.name;
+        if (currentService.provider.avatar) document.getElementById('provider-avatar').src = currentService.provider.avatar;
+        document.getElementById('provider-rating').textContent = `${currentService.provider.averageRating || '4.9'}★ (${currentService.provider.totalReviews || 48} reviews)`;
+        document.getElementById('provider-equity').textContent = `${currentService.provider.equityPoints || 250} Equity Points`;
+      }
+    }
+
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    document.getElementById('side-date').value = tomorrow.toISOString().split('T')[0];
+
+    const user = Auth.getUser();
+    if (user && user.address?.street) {
+      document.getElementById('side-address').value = user.address.street;
+    }
+  }
+
+  function openModal(id) { document.getElementById(id).classList.add('open'); }
+  function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+  document.getElementById('sidebar-book-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const scheduledDate = document.getElementById('side-date').value;
+    const scheduledTime = document.getElementById('side-time').value;
+    const address = document.getElementById('side-address').value;
+
+    const s = currentService || {
+      _id: 'svc_1',
+      title: 'Home Deep Cleaning & Sanitization',
+      basePrice: 1299,
+      provider: { name: 'Sunita Devi' }
+    };
+
+    let bookedItem = null;
+    try {
+      const res = await api('/bookings', {
+        method: 'POST',
+        body: JSON.stringify({ serviceId: s._id, scheduledDate, scheduledTime, address: { street: address } })
+      });
+      if (res && res.data) {
+        bookedItem = res.data;
+      }
+    } catch (err) {
+      console.warn('Backend booking error', err);
+    }
+
+    if (!bookedItem) {
+      bookedItem = {
+        _id: 'BK-' + Math.floor(1000 + Math.random() * 9000),
+        service: s,
+        customer: Auth.getUser() || { name: 'Priya Sharma', phone: '+91 98765 43210' },
+        provider: s.provider || { name: 'Sunita Devi', avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&q=80', averageRating: 4.95 },
+        scheduledDate,
+        scheduledTime,
+        address: { street: address },
+        totalAmount: s.basePrice || 1299,
+        platformFee: Math.round((s.basePrice || 1299) * 0.1),
+        providerEarnings: Math.round((s.basePrice || 1299) * 0.9),
+        equityPointsAwarded: Math.floor((s.basePrice || 1299) / 100) * 5,
+        status: 'confirmed',
+        createdAt: new Date().toISOString()
+      };
+    }
+    BookingHelper.save(bookedItem);
+
+    // Populate Receipt
+    const pName = bookedItem.provider?.name || s.provider?.name || 'Sunita Devi';
+    const sTitle = bookedItem.service?.title || s.title || 'Home Service';
+    const total = bookedItem.totalAmount || s.basePrice || 1299;
+    const orderId = (bookedItem._id && bookedItem._id.startsWith('BK-')) ? bookedItem._id : ('#BK-' + (bookedItem._id ? bookedItem._id.slice(-6).toUpperCase() : '9042'));
+
+    document.getElementById('receipt-title').textContent = sTitle;
+    document.getElementById('receipt-id').textContent = orderId;
+    document.getElementById('receipt-provider-name').textContent = pName;
+    document.getElementById('receipt-datetime').textContent = `${scheduledDate}, ${scheduledTime}`;
+    document.getElementById('receipt-address').textContent = address || 'Your Registered Apartment';
+    document.getElementById('receipt-amount').textContent = `₹${total.toLocaleString()}`;
+    document.getElementById('receipt-equity').textContent = `+${Math.floor(total / 100) * 5} Points`;
+
+    openModal('booking-success-modal');
+    showToast('🎉 Booking Confirmed! Worker-owner dispatched.', 'success');
+  });
+
+  document.addEventListener('DOMContentLoaded', loadDetail);
+</script>
+</body>
+</html>

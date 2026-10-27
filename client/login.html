@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login — GigCoop Cooperative Platform</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .auth-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 100px 20px 40px;
+      background: var(--grad-hero);
+      position: relative;
+    }
+    .auth-card {
+      width: 100%;
+      max-width: 480px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 40px;
+      box-shadow: var(--shadow-lg), var(--shadow-glow);
+      position: relative;
+      z-index: 2;
+    }
+    .demo-badge-bar {
+      background: rgba(37, 99, 235,0.1);
+      border: 1px dashed rgba(37, 99, 235,0.3);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      margin-bottom: 24px;
+    }
+    .demo-badge-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--primary-light);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <a href="/" class="logo">
+      <div class="logo-icon">🏘️</div>
+      <span class="brand">GigCoop</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/services.html">Services</a></li>
+      <li><a href="/group-booking.html">Group Booking</a></li>
+      <li><a href="/voting.html">Governance</a></li>
+      <li><a href="/subscriptions.html">Plans</a></li>
+    </ul>
+    <div class="nav-actions">
+      <select class="lang-selector" id="lang-selector">
+        <option value="en">🇬🇧 English</option>
+        <option value="hi">🇮🇳 हिन्दी</option>
+      </select>
+      <a href="/register.html" class="btn btn-outline btn-sm">Register</a>
+    </div>
+  </div>
+</nav>
+
+<div class="auth-page">
+  <div class="hero-blob hero-blob-1"></div>
+  <div class="hero-blob hero-blob-2"></div>
+
+  <div class="auth-card">
+    <div style="text-align:center; margin-bottom:28px;">
+      <div class="logo-icon" style="margin:0 auto 12px; width:48px; height:48px; font-size:1.5rem;">🔑</div>
+      <h2 style="font-size:1.8rem; margin-bottom:6px;">Welcome Back</h2>
+      <p style="color:var(--text-secondary); font-size:0.9rem;">Sign in to your worker-owned cooperative account</p>
+    </div>
+
+    <!-- Quick 1-Click Demo Login Switcher -->
+    <div class="demo-badge-bar">
+      <div class="demo-badge-title">⚡ Instant Demo 1-Click Login</div>
+      <div class="demo-role-btns">
+        <button type="button" class="demo-role-btn" onclick="quickLogin('customer')">
+          👤 Priya<br><span style="font-size:0.7rem; color:var(--accent);">Customer</span>
+        </button>
+        <button type="button" class="demo-role-btn" onclick="quickLogin('provider')">
+          ⚡ Rajesh<br><span style="font-size:0.7rem; color:var(--gold);">Provider</span>
+        </button>
+        <button type="button" class="demo-role-btn" onclick="quickLogin('admin')">
+          🛡️ Admin<br><span style="font-size:0.7rem; color:var(--primary-light);">Board</span>
+        </button>
+      </div>
+    </div>
+
+    <form id="login-form">
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" id="email" class="form-control" placeholder="you@example.com" required value="priya@gmail.com" />
+      </div>
+
+      <div class="form-group">
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+          <label class="form-label" style="margin-bottom:0;">Password</label>
+          <a href="#" style="font-size:0.8rem; color:var(--primary-light);" onclick="showToast('Use password: password123', 'info')">Forgot Password?</a>
+        </div>
+        <input type="password" id="password" class="form-control" placeholder="••••••••" required value="password123" />
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; margin-top:10px;" id="btn-submit">
+        <span>Sign In to GigCoop</span> →
+      </button>
+    </form>
+
+    <div style="text-align:center; margin-top:24px; padding-top:20px; border-top:1px solid var(--border); font-size:0.88rem; color:var(--text-secondary);">
+      New to GigCoop? <a href="/register.html" style="color:var(--primary-light); font-weight:600;">Create an Account</a>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toast-container"></div>
+
+<script src="js/mockData.js"></script>
+<script src="js/i18n.js"></script>
+<script>
+  function quickLogin(role) {
+    Auth.switchDemoRole(role);
+  }
+
+  document.getElementById('login-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const btn = document.getElementById('btn-submit');
+    btn.disabled = true;
+    btn.textContent = 'Authenticating...';
+
+    try {
+      const res = await api('/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({ email, password })
+      });
+
+      if (res.success) {
+        Auth.setAuth(res.token, res.user);
+        showToast(`Welcome back, ${res.user.name}!`, 'success');
+        setTimeout(() => {
+          window.location.href = `/dashboard-${res.user.role}.html`;
+        }, 600);
+      } else {
+        showToast(res.message || 'Login failed', 'error');
+        btn.disabled = false;
+        btn.innerHTML = '<span>Sign In to GigCoop</span> →';
+      }
+    } catch (err) {
+      // Fallback
+      const user = window.MOCK_DATA.users.find(u => u.email === email) || window.MOCK_DATA.users[0];
+      Auth.setAuth('mock_token_' + user.role, user);
+      showToast(`Welcome, ${user.name}!`, 'success');
+      setTimeout(() => {
+        window.location.href = `/dashboard-${user.role}.html`;
+      }, 600);
+    }
+  });
+</script>
+</body>
+</html>

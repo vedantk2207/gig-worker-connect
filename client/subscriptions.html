@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Subscription Plans — GigCoop</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .sub-hero {
+      padding: 120px 0 50px;
+      background: var(--grad-hero);
+      text-align: center;
+    }
+    .billing-toggle-wrapper {
+      display: inline-flex;
+      align-items: center;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-full);
+      padding: 4px;
+      margin: 32px 0 20px;
+      gap: 4px;
+    }
+    .billing-btn {
+      padding: 10px 24px;
+      border-radius: var(--radius-full);
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: var(--transition);
+      background: transparent;
+      border: none;
+    }
+    .billing-btn.active {
+      background: var(--grad-primary);
+      color: #fff;
+      box-shadow: var(--shadow-sm);
+    }
+    .active-sub-banner {
+      background: linear-gradient(135deg, rgba(37, 99, 235,0.15), rgba(20,184,166,0.1));
+      border: 1px solid rgba(37, 99, 235,0.3);
+      border-radius: var(--radius-xl);
+      padding: 28px;
+      margin-bottom: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <a href="/" class="logo">
+      <div class="logo-icon">🏘️</div>
+      <span class="brand">GigCoop</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/services.html">Services</a></li>
+      <li><a href="/group-booking.html">Group Booking</a></li>
+      <li><a href="/voting.html">Governance</a></li>
+      <li><a href="/subscriptions.html" class="active">Plans</a></li>
+      <li><a href="/equity.html">Worker Equity</a></li>
+      <li><a href="/referral.html">Refer & Earn</a></li>
+    </ul>
+    <div class="nav-actions">
+      <select class="lang-selector" id="lang-selector">
+        <option value="en">🇬🇧 English</option>
+        <option value="hi">🇮🇳 हिन्दी</option>
+      </select>
+      <a href="/login.html" class="btn btn-ghost btn-sm" id="nav-login">Login</a>
+    </div>
+  </div>
+</nav>
+
+<section class="sub-hero">
+  <div class="container">
+    <div class="section-tag">🔄 Seamless Household Care</div>
+    <h1 style="font-size:clamp(2rem, 4vw, 3.2rem); margin-bottom:12px;">Hassle-Free Recurring Home Maintenance</h1>
+    <p style="color:var(--text-secondary); max-width:620px; margin:0 auto;">
+      Never worry about dirty floors, dripping faucets, or blown fuses again. Dedicated worker-owner team assigned exclusively to your home.
+    </p>
+
+    <!-- Billing Cycle Switcher -->
+    <div class="billing-toggle-wrapper">
+      <button class="billing-btn active" id="btn-monthly" onclick="setBilling('monthly')">Monthly Billing</button>
+      <button class="billing-btn" id="btn-annual" onclick="setBilling('annual')">Annual Plan <span class="badge badge-success" style="font-size:0.7rem;">Save 15%</span></button>
+    </div>
+  </div>
+</section>
+
+<section class="section-sm">
+  <div class="container">
+
+    <!-- Active Subscription Management Card -->
+    <div class="active-sub-banner" id="active-sub-box">
+      <div>
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+          <span class="badge badge-success">✓ Active Subscription</span>
+          <span style="font-size:0.85rem; color:var(--text-muted);" id="sub-status-cycle">Monthly Billing</span>
+        </div>
+        <h3 style="font-size:1.4rem; margin-bottom:4px;" id="sub-plan-name">Coop Family Care Plan</h3>
+        <p style="color:var(--text-secondary); font-size:0.9rem;">
+          Next Scheduled Visit: <strong style="color:var(--primary-light);" id="sub-next-date">Monday, 07 Sept 2026 (10:00 AM)</strong> • Assigned to Sunita & Team
+        </p>
+      </div>
+      <div style="display:flex; gap:10px;">
+        <button class="btn btn-outline btn-sm" id="btn-pause-sub" onclick="togglePauseSub()">⏸️ Pause Subscription</button>
+        <button class="btn btn-ghost btn-sm" onclick="showToast('Service time rescheduled to 11:30 AM.', 'success')">📅 Reschedule</button>
+      </div>
+    </div>
+
+    <!-- Plans Grid -->
+    <div class="grid-3" style="align-items:stretch;">
+      
+      <!-- Basic Plan -->
+      <div class="plan-card">
+        <span class="badge badge-primary">Essential</span>
+        <h3 style="margin-top:12px; font-size:1.3rem;">Household Essential</h3>
+        <div class="plan-price" id="price-basic">₹1,999</div>
+        <div class="plan-price-label" id="label-basic">per month • cancel anytime</div>
+        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:24px;">Ideal for busy professionals & compact 1-2 BHK apartments.</p>
+        
+        <ul class="plan-features">
+          <li><strong>2x</strong> Deep Home Cleaning sessions / month</li>
+          <li><strong>1x</strong> Electrical switch & fuse check / month</li>
+          <li>10% Discount on all add-on gig services</li>
+          <li>Zero surge pricing during peak festival weeks</li>
+        </ul>
+
+        <button class="btn btn-outline" style="width:100%; justify-content:center;" onclick="selectPlan('basic', 'Household Essential', 1999)">
+          Subscribe Essential
+        </button>
+      </div>
+
+      <!-- Standard Plan (Popular) -->
+      <div class="plan-card popular">
+        <div class="plan-popular-badge">⭐ MOST POPULAR FOR FAMILIES</div>
+        <span class="badge badge-teal" style="margin-top:8px;">Family Care</span>
+        <h3 style="margin-top:12px; font-size:1.3rem;">Coop Family Care</h3>
+        <div class="plan-price" style="color:var(--primary-light);" id="price-standard">₹3,999</div>
+        <div class="plan-price-label" id="label-standard">per month • cancel anytime</div>
+        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:24px;">Complete peace of mind for standard 2-3 BHK households.</p>
+        
+        <ul class="plan-features">
+          <li><strong>4x</strong> Complete House Cleaning sessions (Weekly)</li>
+          <li><strong>1x</strong> Full Plumbing inspection & tap fixing</li>
+          <li><strong>1x</strong> Electrical appliance checkup & wiring check</li>
+          <li>60-Minute emergency response priority dispatch</li>
+          <li><strong>1x Free</strong> AC filter cleanup voucher</li>
+        </ul>
+
+        <button class="btn btn-primary" style="width:100%; justify-content:center;" onclick="selectPlan('standard', 'Coop Family Care', 3999)">
+          Subscribe Family Care ⚡
+        </button>
+      </div>
+
+      <!-- Premium Plan -->
+      <div class="plan-card">
+        <span class="badge badge-gold">All-Inclusive Luxury</span>
+        <h3 style="margin-top:12px; font-size:1.3rem;">Society Platinum Care</h3>
+        <div class="plan-price" id="price-premium">₹6,999</div>
+        <div class="plan-price-label" id="label-premium">per month • cancel anytime</div>
+        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:24px;">Complete villa & luxury apartment care with elder assistance.</p>
+        
+        <ul class="plan-features">
+          <li><strong>8x</strong> Bi-weekly deep cleaning & sanitization</li>
+          <li><strong>1x</strong> Herbal pest control & termite treatment</li>
+          <li><strong>2x</strong> Terrace / Balcony plant & garden care</li>
+          <li><strong>2x</strong> Assisted wellness checkup visits</li>
+          <li>Free minor replacement spare parts up to ₹500</li>
+        </ul>
+
+        <button class="btn btn-outline" style="width:100%; justify-content:center;" onclick="selectPlan('premium', 'Society Platinum Care', 6999)">
+          Subscribe Platinum
+        </button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer" style="margin-top:80px;">
+  <div class="container">
+    <div class="footer-bottom" style="border:none; padding:0;">
+      <p>© 2026 GigCoop. Cooperative subscription plans.</p>
+      <a href="/services.html" style="color:var(--primary-light);">Explore Single Services →</a>
+    </div>
+  </div>
+</footer>
+
+<div class="toast-container" id="toast-container"></div>
+
+<script src="js/mockData.js"></script>
+<script src="js/i18n.js"></script>
+<script>
+  let billingCycle = 'monthly';
+  let isPaused = false;
+
+  function setBilling(cycle) {
+    billingCycle = cycle;
+    document.getElementById('btn-monthly').classList.toggle('active', cycle === 'monthly');
+    document.getElementById('btn-annual').classList.toggle('active', cycle === 'annual');
+
+    const mult = cycle === 'annual' ? 0.85 : 1;
+
+    document.getElementById('price-basic').textContent = cycle === 'annual' ? '₹1,699' : '₹1,999';
+    document.getElementById('label-basic').textContent = cycle === 'annual' ? 'per month (billed annually)' : 'per month • cancel anytime';
+
+    document.getElementById('price-standard').textContent = cycle === 'annual' ? '₹3,399' : '₹3,999';
+    document.getElementById('label-standard').textContent = cycle === 'annual' ? 'per month (billed annually)' : 'per month • cancel anytime';
+
+    document.getElementById('price-premium').textContent = cycle === 'annual' ? '₹5,949' : '₹6,999';
+    document.getElementById('label-premium').textContent = cycle === 'annual' ? 'per month (billed annually)' : 'per month • cancel anytime';
+  }
+
+  function selectPlan(id, name, price) {
+    showToast(`🎉 Subscribed to ${name}! Your first visit is scheduled for Monday.`, 'success');
+    document.getElementById('sub-plan-name').textContent = name + ' Plan';
+    document.getElementById('sub-status-cycle').textContent = billingCycle.toUpperCase() + ' BILLING';
+    document.getElementById('active-sub-box').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function togglePauseSub() {
+    isPaused = !isPaused;
+    const btn = document.getElementById('btn-pause-sub');
+    if (isPaused) {
+      btn.textContent = '▶️ Resume Subscription';
+      btn.classList.remove('btn-outline');
+      btn.classList.add('btn-primary');
+      showToast('Subscription paused. No charges will occur.', 'info');
+    } else {
+      btn.textContent = '⏸️ Pause Subscription';
+      btn.classList.remove('btn-primary');
+      btn.classList.add('btn-outline');
+      showToast('Subscription resumed. Visits reactivated.', 'success');
+    }
+  }
+</script>
+</body>
+</html>

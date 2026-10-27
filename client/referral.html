@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Refer & Earn — GigCoop</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .referral-hero {
+      padding: 120px 0 50px;
+      background: var(--grad-hero);
+      text-align: center;
+    }
+    .referral-main-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 40px;
+      box-shadow: var(--shadow-lg);
+      max-width: 720px;
+      margin: 0 auto 40px;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <a href="/" class="logo">
+      <div class="logo-icon">🏘️</div>
+      <span class="brand">GigCoop</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/services.html">Services</a></li>
+      <li><a href="/group-booking.html">Group Booking</a></li>
+      <li><a href="/voting.html">Governance</a></li>
+      <li><a href="/subscriptions.html">Plans</a></li>
+      <li><a href="/equity.html">Worker Equity</a></li>
+      <li><a href="/referral.html" class="active">Refer & Earn</a></li>
+    </ul>
+    <div class="nav-actions">
+      <select class="lang-selector" id="lang-selector">
+        <option value="en">🇬🇧 English</option>
+        <option value="hi">🇮🇳 हिन्दी</option>
+      </select>
+      <a href="/login.html" class="btn btn-ghost btn-sm" id="nav-login">Login</a>
+    </div>
+  </div>
+</nav>
+
+<section class="referral-hero">
+  <div class="container">
+    <div class="section-tag">🎁 Community Growth Engine</div>
+    <h1 style="font-size:clamp(2rem, 4vw, 3.2rem); margin-bottom:12px;">Refer Your Neighbors & Earn ₹50 Each</h1>
+    <p style="color:var(--text-secondary); max-width:620px; margin:0 auto;">
+      Help your society members discover fair, ethical home services. You both get ₹50 credited straight to your GigCoop wallet on their first completed service.
+    </p>
+  </div>
+</section>
+
+<section class="section-sm">
+  <div class="container">
+
+    <!-- Main Referral Link Share Box -->
+    <div class="referral-main-box animate-fade-up">
+      <div style="text-align:center; margin-bottom:28px;">
+        <div style="font-size:2rem; margin-bottom:8px;">📢</div>
+        <h3>Your Unique Referral Link</h3>
+        <p style="color:var(--text-secondary); font-size:0.9rem;">Share directly on your society WhatsApp group or building noticeboard</p>
+      </div>
+
+      <div class="referral-link-box" style="margin-bottom:20px;">
+        <input type="text" id="ref-link-input" class="referral-link-input" readonly value="https://gigcoop.org/register?ref=PRIYA88" />
+        <button class="referral-link-copy" onclick="copyRefLink()">📋 Copy Link</button>
+      </div>
+
+      <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+        <button class="btn btn-success btn-sm" onclick="shareWhatsApp()">
+          💬 Share on WhatsApp
+        </button>
+        <button class="btn btn-primary btn-sm" onclick="shareTelegram()">
+          ✈️ Share on Telegram
+        </button>
+      </div>
+    </div>
+
+    <!-- Referral Stats Grid -->
+    <div class="stat-cards">
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background:rgba(37, 99, 235,0.15); color:var(--primary-light);">👥</div>
+        <div class="stat-card-value">6</div>
+        <div class="stat-card-label">Friends Invited</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background:rgba(16,185,129,0.15); color:var(--success);">✅</div>
+        <div class="stat-card-value">4</div>
+        <div class="stat-card-label">Successful Bookings</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background:rgba(245,158,11,0.15); color:var(--gold);">💰</div>
+        <div class="stat-card-value">₹200</div>
+        <div class="stat-card-label">Total Earned</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background:rgba(20,184,166,0.15); color:var(--accent);">👛</div>
+        <div class="stat-card-value">₹250</div>
+        <div class="stat-card-label">Wallet Balance</div>
+      </div>
+    </div>
+
+    <!-- Two-Column Layout -->
+    <div class="grid-2" style="align-items:start; gap:32px;">
+      
+      <!-- Referral Activity Table -->
+      <div>
+        <h3 style="margin-bottom:16px;">📜 Invited Neighbors Activity</h3>
+        <div class="table-container">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Neighbor</th>
+                <th>Status</th>
+                <th>Reward</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Karan Mehra</strong></td>
+                <td><span class="status status-completed">Rewarded</span></td>
+                <td style="color:var(--success); font-weight:700;">+₹50</td>
+              </tr>
+              <tr>
+                <td><strong>Dr. Anand Saxena</strong></td>
+                <td><span class="status status-confirmed">Service Booked</span></td>
+                <td style="color:var(--warning);">Pending ₹50</td>
+              </tr>
+              <tr>
+                <td><strong>Kavita Menon</strong></td>
+                <td><span class="status status-completed">Rewarded</span></td>
+                <td style="color:var(--success); font-weight:700;">+₹50</td>
+              </tr>
+              <tr>
+                <td><strong>Rohit Bansal</strong></td>
+                <td><span class="status status-pending">Registered</span></td>
+                <td style="color:var(--text-muted);">Awaiting booking</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Top Referring Societies Leaderboard -->
+      <div>
+        <h3 style="margin-bottom:16px;">🏆 Top Referring Societies</h3>
+        <div class="card" style="padding:16px;">
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <div class="flex-between" style="padding:10px; background:var(--bg-surface); border-radius:var(--radius-md);">
+              <div style="display:flex; align-items:center; gap:12px;">
+                <span style="font-size:1.2rem;">🥇</span>
+                <div>
+                  <strong style="font-size:0.9rem;">Green Meadows Residency</strong>
+                  <div style="font-size:0.75rem; color:var(--text-muted);">Mumbai • 48 Referrals</div>
+                </div>
+              </div>
+              <span class="badge badge-teal">₹2,400 Community Fund</span>
+            </div>
+
+            <div class="flex-between" style="padding:10px; background:var(--bg-surface); border-radius:var(--radius-md);">
+              <div style="display:flex; align-items:center; gap:12px;">
+                <span style="font-size:1.2rem;">🥈</span>
+                <div>
+                  <strong style="font-size:0.9rem;">Palm Springs Apartments</strong>
+                  <div style="font-size:0.75rem; color:var(--text-muted);">Bangalore • 36 Referrals</div>
+                </div>
+              </div>
+              <span class="badge badge-teal">₹1,800 Community Fund</span>
+            </div>
+
+            <div class="flex-between" style="padding:10px; background:var(--bg-surface); border-radius:var(--radius-md);">
+              <div style="display:flex; align-items:center; gap:12px;">
+                <span style="font-size:1.2rem;">🥉</span>
+                <div>
+                  <strong style="font-size:0.9rem;">DLF CyberCity Enclave</strong>
+                  <div style="font-size:0.75rem; color:var(--text-muted);">Gurgaon • 29 Referrals</div>
+                </div>
+              </div>
+              <span class="badge badge-teal">₹1,450 Community Fund</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer" style="margin-top:80px;">
+  <div class="container">
+    <div class="footer-bottom" style="border:none; padding:0;">
+      <p>© 2026 GigCoop. Community referral rewards.</p>
+      <a href="/services.html" style="color:var(--primary-light);">Browse Services →</a>
+    </div>
+  </div>
+</footer>
+
+<div class="toast-container" id="toast-container"></div>
+
+<script src="js/mockData.js"></script>
+<script src="js/i18n.js"></script>
+<script>
+  function copyRefLink() {
+    const input = document.getElementById('ref-link-input');
+    navigator.clipboard.writeText(input.value);
+    showToast('📋 Referral link copied to clipboard!', 'success');
+  }
+
+  function shareWhatsApp() {
+    const text = encodeURIComponent('Hey neighbor! Join GigCoop to book trusted verified home services with zero platform surge pricing. Get ₹50 bonus on sign up: ' + document.getElementById('ref-link-input').value);
+    window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+  }
+
+  function shareTelegram() {
+    const url = encodeURIComponent(document.getElementById('ref-link-input').value);
+    const text = encodeURIComponent('Join GigCoop for worker-owned verified household services & get ₹50 credit!');
+    window.open(`https://t.me/share/url?url=${url}&text=${text}`, '_blank');
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const user = Auth.getUser();
+    if (user && user.referralCode) {
+      document.getElementById('ref-link-input').value = `${window.location.origin}/register.html?ref=${user.referralCode}`;
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cooperative Board Admin — GigCoop</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <a href="/" class="logo">
+      <div class="logo-icon">🏘️</div>
+      <span class="brand">GigCoop Board</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/voting.html">Governance Voting</a></li>
+      <li><a href="/equity.html">Equity Ledger</a></li>
+      <li><a href="/services.html">Services</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="btn btn-ghost btn-sm" onclick="Auth.switchDemoRole('customer')">👤 Switch to Customer</button>
+      <button class="btn btn-outline btn-sm" onclick="Auth.logout()">Logout</button>
+    </div>
+  </div>
+</nav>
+
+<div class="dashboard-layout">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:24px; padding:0 8px;">
+      <div class="avatar-placeholder" style="width:44px; height:44px; font-size:1.1rem;">🛡️</div>
+      <div>
+        <h4>Coop Board Admin</h4>
+        <span class="badge badge-gold">Central Governance</span>
+      </div>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li><a href="#kpi" class="active"><span>📊</span> Platform Overview</a></li>
+      <li><a href="#kyc"><span>🛡️</span> KYC Verification Queue</a></li>
+      <li><a href="#resolutions"><span>🗳️</span> Policy Governance</a></li>
+      <li><a href="#users"><span>👥</span> Member Directory</a></li>
+      <div class="sidebar-divider"></div>
+      <li><a href="/services.html"><span>🌐</span> Live Platform</a></li>
+    </ul>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="flex-between" style="margin-bottom:32px; flex-wrap:wrap; gap:16px;">
+      <div>
+        <h2>Cooperative Board Overview</h2>
+        <p style="color:var(--text-secondary); font-size:0.9rem;">Monitor cooperative performance, verify worker certifications, and audit platform surplus.</p>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="showToast('Annual financial audit ledger downloaded.', 'success')">📥 Export Audit Report</button>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="stat-cards">
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background:rgba(37, 99, 235,0.15); color:var(--primary-light);">👥</div>
+        <div class="stat-card-value">1,840</div>
+        <div class="stat-card-label">Verified Residents</div>
+        <div class="stat-card-trend trend-up">↑ +18% mo</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background:rgba(20,184,166,0.15); color:var(--accent);">⚡</div>
+        <div class="stat-card-value">240</div>
+        <div class="stat-card-label">Worker-Owners (Coop)</div>
+        <div class="stat-card-trend trend-up">↑ +12% mo</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background:rgba(245,158,11,0.15); color:var(--gold);">💰</div>
+        <div class="stat-card-value">₹1,48,500</div>
+        <div class="stat-card-label">Total Platform Reserve</div>
+        <div class="stat-card-trend trend-up">↑ 100% Retained</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background:rgba(16,185,129,0.15); color:var(--success);">✅</div>
+        <div class="stat-card-value">3,820</div>
+        <div class="stat-card-label">Completed Bookings</div>
+        <div class="stat-card-trend trend-up">4.92★ Avg</div>
+      </div>
+    </div>
+
+    <!-- KYC Provider Verification Queue -->
+    <div style="margin-bottom:40px;">
+      <div class="flex-between" style="margin-bottom:16px;">
+        <h3>🛡️ Pending Provider KYC Verifications (3)</h3>
+        <span class="badge badge-teal">Cooperative Quality Assurance</span>
+      </div>
+
+      <div class="table-container">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Provider Applicant</th>
+              <th>Primary Trade</th>
+              <th>Experience</th>
+              <th>ID & Background Check</th>
+              <th>Decision</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <div class="avatar-placeholder" style="width:32px; height:32px;">MK</div>
+                  <div>
+                    <strong>Manoj Kumar</strong>
+                    <div style="font-size:0.75rem; color:var(--text-muted);">manoj@gmail.com</div>
+                  </div>
+                </div>
+              </td>
+              <td>Carpentry & Woodwork</td>
+              <td>7 Years</td>
+              <td><span class="badge badge-success">✓ Aadhaar & Police Verified</span></td>
+              <td>
+                <button class="btn btn-success btn-sm" onclick="verifyApplicant(this)">Approve & Issue Equity</button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <div class="avatar-placeholder" style="width:32px; height:32px;">RA</div>
+                  <div>
+                    <strong>Ramesh Ahir</strong>
+                    <div style="font-size:0.75rem; color:var(--text-muted);">ramesh@gmail.com</div>
+                  </div>
+                </div>
+              </td>
+              <td>Plumbing & Sanitary</td>
+              <td>5 Years</td>
+              <td><span class="badge badge-success">✓ ITI Certificate Verified</span></td>
+              <td>
+                <button class="btn btn-success btn-sm" onclick="verifyApplicant(this)">Approve & Issue Equity</button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <div class="avatar-placeholder" style="width:32px; height:32px;">SL</div>
+                  <div>
+                    <strong>Savitri Lal</strong>
+                    <div style="font-size:0.75rem; color:var(--text-muted);">savitri@gmail.com</div>
+                  </div>
+                </div>
+              </td>
+              <td>Elder Care & Nursing</td>
+              <td>4 Years</td>
+              <td><span class="badge badge-gold">⏳ Nursing License Under Review</span></td>
+              <td>
+                <button class="btn btn-outline btn-sm" onclick="verifyApplicant(this)">Verify Credential</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Recent Platform Bookings & Resolution Queue -->
+    <div>
+      <div class="flex-between" style="margin-bottom:16px;">
+        <h3>📦 Recent Platform Activity</h3>
+        <a href="/services.html" class="btn btn-ghost btn-sm">View All Services</a>
+      </div>
+
+      <div class="table-container">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Customer</th>
+              <th>Worker-Owner</th>
+              <th>Amount</th>
+              <th>Platform Fee (10%)</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>#BK-101</td>
+              <td>Priya Sharma</td>
+              <td>Sunita Devi</td>
+              <td>₹1,299</td>
+              <td>₹130 (To Medical Fund)</td>
+              <td><span class="status status-confirmed">Dispatched</span></td>
+            </tr>
+            <tr>
+              <td>#BK-102</td>
+              <td>Rahul Verma</td>
+              <td>Rajesh Kumar</td>
+              <td>₹499</td>
+              <td>₹50 (To Reserve)</td>
+              <td><span class="status status-completed">Paid & Settled</span></td>
+            </tr>
+            <tr>
+              <td>#BK-103</td>
+              <td>Dr. Anand Saxena</td>
+              <td>Amit Patel</td>
+              <td>₹599</td>
+              <td>₹60 (To Reserve)</td>
+              <td><span class="status status-completed">Paid & Settled</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<div class="toast-container" id="toast-container"></div>
+
+<script src="js/mockData.js"></script>
+<script src="js/i18n.js"></script>
+<script>
+  function verifyApplicant(btn) {
+    btn.disabled = true;
+    btn.textContent = '✓ Verified & Onboarded';
+    btn.classList.remove('btn-outline');
+    btn.classList.add('btn-success');
+    showToast('🎉 Provider approved! Issued worker-owner cooperative membership badge & 50 equity points.', 'success');
+  }
+</script>
+</body>
+</html>

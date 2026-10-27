@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Provider Work Hub — GigCoop</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <a href="/" class="logo">
+      <div class="logo-icon">🏘️</div>
+      <span class="brand">GigCoop</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/equity.html">My Equity & Stake</a></li>
+      <li><a href="/voting.html">Governance Voting</a></li>
+      <li><a href="/services.html">Platform Services</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="btn btn-ghost btn-sm" onclick="Auth.switchDemoRole('customer')">👤 Switch to Customer View</button>
+      <button class="btn btn-outline btn-sm" onclick="Auth.logout()">Logout</button>
+    </div>
+  </div>
+</nav>
+
+<div class="dashboard-layout">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:24px; padding:0 8px;">
+      <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&q=80" class="avatar avatar-md" alt="Avatar" id="prov-avatar" />
+      <div>
+        <h4 id="prov-name">Rajesh Kumar</h4>
+        <span class="badge badge-primary">⚡ Worker-Owner</span>
+      </div>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li><a href="#jobs" class="active"><span>💼</span> Active Jobs & Leads</a></li>
+      <li><a href="/equity.html"><span>💎</span> Equity & Dividends</a></li>
+      <li><a href="/voting.html"><span>🗳️</span> Co-op Governance</a></li>
+      <li><a href="#schedule"><span>📅</span> Weekly Schedule</a></li>
+      <div class="sidebar-divider"></div>
+      <li><a href="#" onclick="showToast('Guild Training Center: 4 modules available.', 'info')"><span>🎓</span> Skill Training Hub</a></li>
+    </ul>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="flex-between" style="margin-bottom:32px; flex-wrap:wrap; gap:16px;">
+      <div>
+        <h2>Worker-Owner Work Hub</h2>
+        <p style="color:var(--text-secondary); font-size:0.9rem;">Fair 90% payout direct to your bank account with zero predatory platform fees.</p>
+      </div>
+      <div style="display:flex; gap:10px;">
+        <span class="badge badge-success" style="padding:8px 16px; font-size:0.85rem;">● Online for Instant Dispatch</span>
+      </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="stat-cards">
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background:rgba(16,185,129,0.15); color:var(--success);">💰</div>
+        <div class="stat-card-value">₹18,450</div>
+        <div class="stat-card-label">This Week's Net Take-Home</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background:rgba(37, 99, 235,0.15); color:var(--primary-light);">💎</div>
+        <div class="stat-card-value">480 pts</div>
+        <div class="stat-card-label">Cooperative Ownership (3.2%)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background:rgba(245,158,11,0.15); color:var(--gold);">⭐</div>
+        <div class="stat-card-value">4.92★</div>
+        <div class="stat-card-label">Customer Rating (84 jobs)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background:rgba(20,184,166,0.15); color:var(--accent);">🏥</div>
+        <div class="stat-card-value">Active</div>
+        <div class="stat-card-label">Co-op Health Coverage</div>
+      </div>
+    </div>
+
+    <!-- Incoming Urgent Job Lead -->
+    <div class="card" style="margin-bottom:32px; border-color:var(--accent); background:linear-gradient(145deg, rgba(20,184,166,0.08), rgba(37, 99, 235,0.04));">
+      <div class="flex-between" style="margin-bottom:12px;">
+        <span class="badge badge-teal">🔔 Incoming Booking Request</span>
+        <span style="font-size:0.85rem; color:var(--text-muted);">2.1 km away • Powai Guild</span>
+      </div>
+
+      <div class="flex-between" style="flex-wrap:wrap; gap:16px; margin-bottom:16px;">
+        <div>
+          <h3 style="font-size:1.3rem; margin-bottom:4px;">Main Inverter & MCB Circuit Breaker Tripping Fix</h3>
+          <p style="color:var(--text-secondary); font-size:0.88rem;">Customer: <strong>Dr. Anand Saxena</strong> • Flat 501, Tower A, Green Meadows</p>
+          <p style="color:var(--text-muted); font-size:0.8rem; margin-top:4px;">Notes: "Master bedroom switches sparking, urgent inspection needed."</p>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-family:var(--font-heading); font-size:1.5rem; font-weight:800; color:var(--accent);">₹699</div>
+          <span style="font-size:0.75rem; color:var(--gold);">+35 Equity Pts</span>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:12px;">
+        <button class="btn btn-primary" style="flex:1; justify-content:center;" onclick="acceptJob(this)">
+          ✓ Accept Job & Dispatch
+        </button>
+        <button class="btn btn-outline" onclick="showToast('Lead skipped and routed to next available coop provider.', 'info')">
+          Decline
+        </button>
+      </div>
+    </div>
+
+    <!-- Active Jobs in Execution -->
+    <div style="margin-bottom:40px;">
+      <h3 style="margin-bottom:16px;">Active Jobs in Execution</h3>
+      <div class="card">
+        <div class="flex-between" style="margin-bottom:12px;">
+          <span class="badge badge-primary">⚡ In Progress</span>
+          <span style="font-size:0.85rem; color:var(--text-muted);">Scheduled: Today, 02:00 PM</span>
+        </div>
+        <h4 style="font-size:1.15rem; margin-bottom:4px;">Complete Home Electrical Check & Appliance Fix</h4>
+        <p style="color:var(--text-secondary); font-size:0.88rem; margin-bottom:16px;">
+          Customer: <strong>Priya Sharma</strong> • Flat 402, Green Meadows Residency
+        </p>
+        <div class="flex-between" style="flex-wrap:wrap; gap:12px;">
+          <div style="font-size:0.9rem;">
+            Net Payout: <strong style="color:var(--accent);">₹449</strong> (90%) • Platform Fee: ₹50
+          </div>
+          <div style="display:flex; gap:10px;">
+            <button class="btn btn-outline btn-sm" onclick="showToast('Customer notified you have reached the premises.', 'info')">📍 Mark Arrived</button>
+            <button class="btn btn-success btn-sm" onclick="completeJob(this)">✅ Complete & Claim ₹449 + 25 pts</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Today's Schedule -->
+    <div>
+      <h3 style="margin-bottom:16px;">Today's Schedule & Appointments</h3>
+      <div class="table-container">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Customer</th>
+              <th>Service</th>
+              <th>Location</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>10:00 AM</td>
+              <td>Priya Sharma</td>
+              <td>Electrical Check</td>
+              <td>Green Meadows Flat 402</td>
+              <td><span class="status status-confirmed">In Progress</span></td>
+            </tr>
+            <tr>
+              <td>03:30 PM</td>
+              <td>Rahul Verma</td>
+              <td>AC Deep Jet Wash</td>
+              <td>Palm Springs Flat 1104</td>
+              <td><span class="status status-pending">Upcoming</span></td>
+            </tr>
+            <tr>
+              <td>06:00 PM</td>
+              <td>Kavita Menon</td>
+              <td>Switchboard Repair</td>
+              <td>Green Meadows Flat 304</td>
+              <td><span class="status status-pending">Upcoming</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<div class="toast-container" id="toast-container"></div>
+
+<script src="js/mockData.js"></script>
+<script src="js/i18n.js"></script>
+<script>
+  function acceptJob(btn) {
+    btn.disabled = true;
+    btn.textContent = 'Accepted! Navigating...';
+    showToast('🚀 Job accepted! Customer notified of your dispatch.', 'success');
+  }
+
+  function completeJob(btn) {
+    btn.disabled = true;
+    btn.textContent = 'Completed!';
+    showToast('🎉 Job marked complete! ₹449 credited to wallet & +25 Equity Points awarded.', 'success');
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const user = Auth.getUser();
+    if (user && user.role === 'provider') {
+      document.getElementById('prov-name').textContent = user.name || 'Rajesh Kumar';
+      if (user.avatar) document.getElementById('prov-avatar').src = user.avatar;
+    }
+  });
+</script>
+</body>
+</html>
